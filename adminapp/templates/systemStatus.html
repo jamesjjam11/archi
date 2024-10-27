@@ -1,0 +1,16 @@
+{% extends 'user/index.html' %}
+{% block content %}
+<br><br>
+<div class="mt-4">
+    <h3 class="mb-4">Estado del Sistema</h3>
+        {% if is_system_available %}
+            <div class="alert alert-success" role="alert">
+                El sistema está disponible.
+            </div>
+        {% else %}
+            <div class="alert alert-danger" role="alert">
+                El sistema no está disponible.
+            </div>
+        {% endif %}
+</div>
+{% endblock content %}

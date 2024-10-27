@@ -1,0 +1,38 @@
+{% extends 'user/index.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Lista de Reportes</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nombre del Archivo</th>
+          <th>Responsable</th>
+          <th>Estado</th>
+          <th>Fecha de Subida</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for documento in documentos %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ documento.nombre_archivo }}</td>
+          <td>{{ documento.responsable }}</td>
+          <td>{{ documento.estado }}</td>
+          <td>{{ documento.fecha_subida }}</td>
+          <td>
+            <a href="{% url 'reporte_documento' documento.id %}" class="btn btn-info">Ver Reporte</a>
+            <a href="{% url 'descargar_reporte' documento.id %}" class="btn btn-success">Descargar Reporte</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6">No hay reportes disponibles.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

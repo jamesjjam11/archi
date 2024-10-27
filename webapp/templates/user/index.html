@@ -1,0 +1,403 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Gobierno Autonomo Departamental de Potosi</title>
+    <meta
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      name="viewport"
+    />
+    <link
+      rel="icon"
+      href="/static/img/kaiadmin/favicon.ico"
+      type="image/x-icon"
+    />
+
+    <!-- Fonts and icons -->
+    <script src="/static/js/plugin/webfont/webfont.min.js"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["/static/css/fonts.min.css"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+
+    <!-- CSS archivos -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/css/plugins.min.css" />
+    <link rel="stylesheet" href="/static/css/kaiadmin.min.css" />
+    <link rel="stylesheet" href="/static/css/kaiadmin.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link rel="stylesheet" href="/static/css/demo.css" />
+    
+
+  </head>
+  <style>
+    body {
+        background-color: #0C6D73;
+    }
+    html, body {
+    height: 100%;
+    margin: 0; /* Elimina márgenes por defecto */
+}
+</style>
+
+  <body>
+    <div class="wrapper">
+      <!-- Sidebar -->
+      <div class="sidebar" data-background-color="dark">
+        <div class="sidebar-logo">
+          <!-- Logo Header -->
+          <div class="logo-header">
+            <a href="{% url 'index' %}">
+              <div>
+                <!-- Aquí se coloca la imagen en lugar del texto GADP -->
+                <img src="{% static 'assets/images/LOGO LETRA BLANCO.png' %}" alt="Logo GADP" style="height: 50px;">
+              </div>
+            </a>
+            <div class="nav-toggle">
+              <button class="btn btn-toggle toggle-sidebar">
+                <i class="gg-menu-right"></i>
+              </button>
+              <button class="btn btn-toggle sidenav-toggler">
+                <i class="gg-menu-left"></i>
+              </button>
+            </div>
+            <button class="topbar-toggler more">
+              <i class="gg-more-vertical-alt"></i>
+            </button>
+          </div>
+          
+          <!-- End Logo Header -->
+        </div>
+        <div class="sidebar-wrapper scrollbar scrollbar-inner">
+          <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+              <li class="nav-section">
+                <span class="sidebar-mini-icon">
+                  <i class="fa fa-ellipsis-h"></i>
+                </span>
+                <h4 class="text-section">Inicio</h4>
+              </li>
+              <!-- Pestañas visibles solo para SuperAdmin -->
+              {% if 'SuperAdmin' in user_roles %}
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#base">
+                  <i class="fas fa-user"></i>
+                  <p>Usuarios</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="base">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="{% url 'register' %}">
+                        <span class="sub-item">Crear Usuarios</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href=" {% url 'listUser' %}">
+                        <span class="sub-item">Listar Usuarios</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              {% endif %}
+              <!-- Pestañas visibles solo para SuperAdmin y Admin -->
+              {% if 'SuperAdmin' in user_roles or 'Admin' in user_roles %}
+              <li class="nav-item">
+                <a href="{% url 'list_bitacora' %}">
+                  <i class="far fa-chart-bar"></i>
+                  <p>Bitacora</p> 
+                </a>
+              </li>
+              {% endif %}
+              {% if 'SuperAdmin' in user_roles %}
+              <li class="nav-item">
+                <a href="{% url 'listar_secretarias' %}">
+                  <i class="fas fa-desktop"></i>
+                  <p>Secretarias</p>
+                </a>
+              </li>
+              {% endif%}
+              <!-- Pestañas visibles solo para SuperAdmin y Admin -->
+              {% if 'SuperAdmin' in user_roles or 'Admin' in user_roles %}
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#submenu">
+                  <i class="fas fa-bars"></i>
+                  <p>Sistema</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="submenu">
+                  <ul class="nav nav-collapse">
+                    <li>
+                        <a href="{% url 'monitor_system' %}">Monitorear Sistema</a>
+                      </a>
+                      <div class="collapse" id="subnav1">
+                        
+                      </div>
+                    </li>
+                    <li>
+                      <a href="{% url 'system_status' %}">Ver estado del sistema</a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              {% endif %}
+
+              {% if 'Admin' in user_roles or 'UserArchivo' in user_roles or 'SuperAdmin' in user_roles %}
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#documentos">
+                    <i class="icon-doc"></i>
+                    <p>Documentos</p>
+                    <span class="caret"></span>
+                </a>
+                <div class="collapse" id="documentos">
+                    <ul class="nav nav-collapse">
+                        <li>
+                            <a href="{% url 'subir_documento' %}">Registrar Documentos</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'lista_archivos' %}">Listar Documentos</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'buscar_documentos' %}">Buscar Documentos</a>
+                        </li>
+                    </ul>
+                </div>
+              </li>
+              
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#soli">
+                  <i class="fas fa-receipt"></i>
+                  <p>Solicitudes</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="soli">
+                  <ul class="nav nav-collapse">
+                    <li>
+                        <a href="{% url 'lista_solicitudes' %}">Solicitudes Prestamos</a>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{% url 'lista_prestamos_pendientes' %}">Lista de Devoluciones</a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              {% endif %}
+              {% if 'UserPersonal' in user_roles %}
+              <li class="nav-item">
+                <a href="{% url 'solicitar_prestamo' %}">
+                  <i class="fas fa-clipboard-list"></i>
+                  <p>Solicitud Prestamo</p>
+                </a>
+              </li>
+              {% endif %}
+              {% if 'SuperAdmin' in user_roles or 'Admin' in user_roles %}
+                {% if documento_id %}
+                <li class="nav-item">
+                  <a href="{% url 'reporte_documento' documento_id %}">
+                    <i class="fas fa-clipboard-list"></i>
+                    <p>Reportes</p>
+                  </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                  <a href="#">
+                    <i class="fas fa-clipboard-list"></i>
+                    <p>Reportes (sin documento)</p>
+                  </a>
+                </li>
+              {% endif %}
+              <li class="nav-item">
+                <a href="{% url 'lista_reportes' %}">
+                  <i class="fas fa-clipboard-list"></i>
+                  <p>Reportes</p>
+                </a>
+              </li>
+             {% endif %} 
+              {% if 'SuperAdmin' in user_roles %}
+              <li class="nav-item">
+                <form method="POST" action="{% url 'backup_database' %}" id="backup-form">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-database"></i> Copia de Seguridad
+                  </button>
+                </form>
+              </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- End Sidebar -->
+      <div class="main-panel">
+        <div class="main-header">
+          <div class="main-header-logo">
+            <!-- Logo Header -->
+            <div class="logo-header colorgre" >
+              <a href="index.html" class="logo">
+                <img
+                  src="/static/img/kaiadmin/logo_light.svg"
+                  alt="navbar brand"
+                  class="navbar-brand"
+                  height="20"
+                />
+              </a>
+              <div class="nav-toggle">
+                <button class="btn btn-toggle toggle-sidebar">
+                  <i class="gg-menu-right"></i>
+                </button>
+                <button class="btn btn-toggle sidenav-toggler">
+                  <i class="gg-menu-left"></i>
+                </button>
+              </div>
+              <button class="topbar-toggler more">
+                <i class="gg-more-vertical-alt"></i>
+              </button>
+            </div>
+            <!-- End Logo Header -->
+          </div>
+          <!-- Navbar Header -->
+            <!-- Navbar Header - Sin menú desplegable -->
+            <!-- Botón para Cerrar Sesión con fondo personalizado -->
+            <div class="d-flex justify-content-end align-items-center p-3" style="background-color: #0E9097;">
+              <a class="btn btn-sm" style="width: 100px; background-color: #6DA5C0; border-color: white;" href="{% url 'logout' %}?next=/login/">
+                  Cerrar Sesión
+              </a>
+            </div>
+
+          <!-- End Navbar -->
+        </div>
+        <!-- contenido de la pagina -->
+        <div class="right_col" role="main" >
+          <div class="card-body">
+            {% block content %}
+            {% endblock %}
+          </div>
+        </div>
+        <!-- /Contenido de la Pagina -->  
+      </div>
+
+      <!-- Custom template | don't include it in your project! -->
+      <!-- End Custom template -->
+    </div>
+    <!--   Core JS Files   -->
+    <!-- jQuery (necesario para los plugins de JavaScript de Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Notify.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+
+    <script src="/static/js/core/popper.min.js"></script>
+    <script src="/static/js/core/bootstrap.min.js"></script>
+
+    <!-- jQuery Scrollbar -->
+    <script src="/static/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+    <!-- Chart JS -->
+    <script src="/static/js/plugin/chart.js/chart.min.js"></script>
+
+    <!-- jQuery Sparkline -->
+    <script src="/static/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
+    <!-- Chart Circle -->
+    <script src="/static/js/plugin/chart-circle/circles.min.js"></script>
+
+    <!-- Datatables -->
+    <script src="/static/js/plugin/datatables/datatables.min.js"></script>
+
+    <!-- Sweet Alert -->
+    <script src="/static/js/plugin/sweetalert/sweetalert.min.js"></script>
+
+    <!-- Kaiadmin JS -->
+    <script src="/static/js/kaiadmin.min.js"></script>
+
+    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
+    <script src="/static/js/setting-demo.js"></script>
+    <script src="/static/js/demo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+      $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
+        type: "line",
+        height: "70",
+        width: "100%",
+        lineWidth: "2",
+        lineColor: "#177dff",
+        fillColor: "rgba(23, 125, 255, 0.14)",
+      });
+
+      $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
+        type: "line",
+        height: "70",
+        width: "100%",
+        lineWidth: "2",
+        lineColor: "#f3545d",
+        fillColor: "rgba(243, 84, 93, .14)",
+      });
+
+      $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
+        type: "line",
+        height: "70",
+        width: "100%",
+        lineWidth: "2",
+        lineColor: "#ffa534",
+        fillColor: "rgba(255, 165, 52, .14)",
+      });
+    </script>
+    <script>
+      $(document).ready(function() {
+          if (typeof $().modal == 'function') {
+              console.log('Bootstrap modal is working');
+          } else {
+              console.log('Bootstrap modal is not loaded');
+          }
+      });
+  </script>
+  <script>
+    document.getElementById('backup-button').addEventListener('click', function() {
+      if (confirm('¿Estás seguro de que deseas crear una copia de seguridad?')) {
+        // Enviar la solicitud POST usando Fetch API
+        fetch("{% url 'backup_database' %}", {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "Content-Type": "application/json"
+          },
+        })
+        .then(response => response.blob())
+        .then(blob => {
+          // Crear una URL de descarga para el archivo
+          var link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = "backup.sql";  // Puedes personalizar el nombre del archivo
+          link.click();
+        })
+        .catch(error => {
+          alert("Hubo un error al crear la copia de seguridad: " + error.message);
+        });
+      }
+    });
+  </script>
+  </body>
+</html>

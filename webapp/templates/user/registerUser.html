@@ -1,0 +1,383 @@
+{% extends 'user/index.html' %}
+{% block content %}
+<br><br>
+<div class="container">
+  <div class="page-inner">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <!-- Botón para abrir el modal de Registrar Secretaria -->
+            <button type="button"  style="width: 200px; background-color: #6DA5C0; border-color: white;" data-toggle="modal" data-target="#addSecretariaModal">Registrar Secretaría</button>
+            <!-- Botón para abrir el modal de Registrar Unidad -->
+            <button type="button"  style="width: 200px; background-color: #6DA5C0; border-color: white;" data-toggle="modal" data-target="#addUnidadModal">Registrar Unidad</button>
+            <!-- Botón para abrir el modal de Añadir Cargo -->
+            <button type="button"  style="width: 200px; background-color: #6DA5C0; border-color: white;" data-toggle="modal" data-target="#addCargoModal">Añadir Cargo</button>
+          </div>  
+          <div class="card-header card-header-primary">
+            <h4 class="card-title">Registrar Usuario</h4>
+          </div>
+          {% if messages %}
+          <div id="message-box" class="alert alert-dismissible {{ messages.tags }}">
+            {% for message in messages %}
+              {{ message }}
+            {% endfor %}
+          </div>
+        {% endif %}
+          <div class="card-body pt-0">
+            <!-- Formulario combinado -->
+            <form method="post" id="combinedForm" enctype="multipart/form-data">
+              {% csrf_token %}
+              <h3 class="mb-3">Datos del Usuario</h3>
+              <div class="form-row">
+              <div class="col-md-7">
+               <div class="form-row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                      <label class="bmd-label-floating">{{ form.username.label }} <span style="color: red;">*</span></label>
+                      <input type="{{ form.username.field.widget.input_type }}" 
+                             name="{{ form.username.name }}" 
+                             id="{{ form.username.id_for_label }}" 
+                             class="form-control" 
+                             value="{{ form.username.value|default_if_none:'' }}">
+                      {% if form.username.errors %}
+                          <div class="invalid-feedback d-block">
+                              {{ form.username.errors }}
+                          </div>
+                      {% endif %}
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">{{ form.email.label }}<span style="color: red;">*</span></label>
+                    <input type="{{ form.email.field.widget.input_type }}" name="{{ form.email.name }}"
+                      id="{{ form.email.id_for_label }}" class="form-control"
+                      value="{{ form.email.value|default_if_none:'' }}">
+                    {% if form.email.errors %}
+                    <div class="invalid-feedback d-block">
+                      {{ form.email.errors }}
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="bmd-label-floating">{{ form.roles.label }}<span style="color: red;">*</span> </label>
+                  <select name="{{ form.roles.name }}" 
+                          id="{{ form.roles.id_for_label }}" 
+                          class="form-control">
+                    <option value="" disabled selected hidden></option>
+                    {% for option in form.roles.field.queryset %}
+                      <option value="{{ option.pk }}" 
+                              {% if option.pk == form.roles.value %}selected{% endif %}>
+                        {{ option }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                  {% if form.roles.errors %}
+                    <div class="invalid-feedback d-block">
+                      {{ form.roles.errors }}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+              <div class="form-row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                      <label class="bmd-label-floating">{{ form.password1.label }}<span style="color: red;">*</span></label>
+                      <input type="{{ form.password1.field.widget.input_type }}" 
+                             name="{{ form.password1.name }}" 
+                             id="{{ form.password1.id_for_label }}" 
+                             class="form-control" 
+                             value="{{ form.password1.value|default_if_none:'' }}">
+                      {% if form.password1.errors %}
+                          <div class="invalid-feedback d-block">
+                              {{ form.password1.errors }}
+                          </div>
+                      {% endif %}
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label class="bmd-label-floating">{{ form.password2.label }}<span style="color: red;">*</span></label>
+                      <input type="{{ form.password2.field.widget.input_type }}" 
+                             name="{{ form.password2.name }}" 
+                             id="{{ form.password2.id_for_label }}" 
+                             class="form-control" 
+                             value="{{ form.password2.value|default_if_none:'' }}">
+                      {% if form.password2.errors %}
+                          <div class="invalid-feedback d-block">
+                              {{ form.password2.errors }}
+                          </div>
+                      {% endif %}
+                  </div>
+              </div>
+              </div>      
+            <h3 class="mb-3">Datos de la Persona</h3>
+            <div class="form-row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">{{ persona_form.ci.label }}<span style="color: red;">*</span></label>
+                  <input type="{{ persona_form.ci.field.widget.input_type }}" 
+                         name="{{ persona_form.ci.name }}" 
+                         id="{{ persona_form.ci.id_for_label }}" 
+                         class="form-control" 
+                         value="{{ persona_form.ci.value|default_if_none:'' }}">
+                  {% if persona_form.ci.errors %}
+                    <div class="invalid-feedback d-block">
+                      {{ persona_form.ci.errors }}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">{{ persona_form.nombre.label }}<span style="color: red;">*</span></label>
+                  <input type="{{ persona_form.nombre.field.widget.input_type }}" 
+                         name="{{ persona_form.nombre.name }}" 
+                         id="{{ persona_form.nombre.id_for_label }}" 
+                         class="form-control" 
+                         value="{{ persona_form.nombre.value|default_if_none:'' }}">
+                  {% if persona_form.nombre.errors %}
+                    <div class="invalid-feedback d-block">
+                      {{ persona_form.nombre.errors }}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+          </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">{{ persona_form.apellido_paterno.label }}<span style="color: red;">*</span></label>
+                  <input type="{{ persona_form.apellido_paterno.field.widget.input_type }}" 
+                         name="{{ persona_form.apellido_paterno.name }}" 
+                         id="{{ persona_form.apellido_paterno.id_for_label }}" 
+                         class="form-control" 
+                         value="{{ persona_form.apellido_paterno.value|default_if_none:'' }}">
+                  {% if persona_form.apellido_paterno.errors %}
+                    <div class="invalid-feedback d-block">
+                      {{ persona_form.apellido_paterno.errors }}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>           
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">{{ persona_form.apellido_materno.label }}</label>
+                  <input type="{{ persona_form.apellido_materno.field.widget.input_type }}" 
+                         name="{{ persona_form.apellido_materno.name }}" 
+                         id="{{ persona_form.apellido_materno.id_for_label }}" 
+                         class="form-control" 
+                         value="{{ persona_form.apellido_materno.value|default_if_none:'' }}">
+                  {% if persona_form.apellido_materno.errors %}
+                    <div class="invalid-feedback d-block">
+                      {{ persona_form.apellido_materno.errors }}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>            
+            </div>
+            <h3 class="mb-3">Cargo y Unidad</h3>
+            <div class="form-row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="bmd-label-floating">{{ usuario_cargo_unidad_form.nombre_unidad.label }}</label>
+                <select name="{{ usuario_cargo_unidad_form.nombre_unidad.name }}" 
+                        id="id_nombre_unidad" 
+                        class="form-control">
+                    <option value=""{% if usuario_cargo_unidad_form.nombre_unidad.value == "" %} selected{% endif %}></option>
+                    {% for choice in usuario_cargo_unidad_form.nombre_unidad.field.choices %}
+                        <option value="{{ choice.0 }}"{% if usuario_cargo_unidad_form.nombre_unidad.value == choice.0 %} selected{% endif %}>{{ choice.1 }}</option>
+                    {% endfor %}
+                </select>
+                {% if usuario_cargo_unidad_form.nombre_unidad.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ usuario_cargo_unidad_form.nombre_unidad.errors }}
+                    </div>
+                {% endif %}
+              </div>
+            </div>    
+            <div class="col-md-4">
+              <div class="form-group">
+                  <label class="bmd-label-floating">{{ usuario_cargo_unidad_form.nombre_cargo.label }}</label>
+                  <select name="{{ usuario_cargo_unidad_form.nombre_cargo.name }}" 
+                          id="{{ usuario_cargo_unidad_form.nombre_cargo.id_for_label }}" 
+                          class="form-control">
+                      <option value=""{% if usuario_cargo_unidad_form.nombre_cargo.value == "" %} selected{% endif %}></option>
+                      {% for choice in usuario_cargo_unidad_form.nombre_cargo.field.choices %}
+                          <option value="{{ choice.0 }}"{% if usuario_cargo_unidad_form.nombre_cargo.value == choice.0 %} selected{% endif %}>{{ choice.1 }}</option>
+                      {% endfor %}
+                  </select>
+                  {% if usuario_cargo_unidad_form.nombre_cargo.errors %}
+                      <div class="invalid-feedback d-block">
+                          {{ usuario_cargo_unidad_form.nombre_cargo.errors }}
+                      </div>
+                  {% endif %}
+              </div>
+          </div>     
+            </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="id_fecha_inicio">Fecha de Inicio</label>
+                  <input type="text" id="id_fecha_inicio" class="form-control" value="{{ instance.fecha_inicio }}" readonly>
+              </div>
+            </div>
+          </div>    
+          <div class="row justify-content-center mt-4">
+            <div class="col-md-6 text-center">
+                <div class="d-flex justify-content-center mb-3">
+                    <div class="border rounded-circle position-relative"
+                        style="width: 200px; height: 200px; overflow: hidden;">
+                        <div id="image-preview"
+                            class="w-100 h-100 d-flex align-items-center justify-content-center">
+                            Imagen aquí
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary btn-sm mt-3" style="width: 200px;"
+                    onclick="document.getElementById('id_image').click();">Seleccionar imagen</button>
+                <input type="file" class="custom-file-input" id="id_image" name="image" accept="image/*"
+                    style="display: none;">
+            </div>
+        </div>     
+      </div>
+              <script>document.addEventListener('DOMContentLoaded', function () {
+                const fileElem = document.getElementById('id_image');
+                const imagePreview = document.getElementById('image-preview');
+            
+                fileElem.addEventListener('change', handleFiles);
+            
+                function handleFiles() {
+                    const fileList = this.files;
+                    if (fileList.length > 0) {
+                        const file = fileList[0];
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.readAsDataURL(file);
+                            reader.onloadend = () => {
+                                imagePreview.innerHTML = `<img src="${reader.result}" class="img-fluid rounded w-100 h-100" alt="Image preview">`;
+                            };
+                        }
+                    } else {
+                        imagePreview.innerHTML = '';
+                    }
+                }
+            });
+            
+            </script>
+            <button type="submit" name="submit_user" class="btn btn-primary">Registrar Usuario</button>
+            </form>
+          <!-- Modal para agregar Secretaría -->
+          <div class="modal fade" id="addSecretariaModal" tabindex="-1" role="dialog" aria-labelledby="addSecretariaModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addSecretariaModalLabel">Registrar Secretaría</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" id="secretariaForm">
+                            {% csrf_token %}
+                            {{ secretaria_form.as_p }}
+                            <button type="submit" name="submit_secretaria" class="btn btn-primary">Guardar</button>
+                        </form>
+                        <div id="secretariaFormErrors"></div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <!-- Contenedor para el mensaje de éxito -->
+          <div id="successMessage" class="toast-message" style="display:none; background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px; border: 1px solid #c3e6cb;"></div>
+          <!-- Modal para agregar Unidad -->
+          <div class="modal fade" id="addUnidadModal" tabindex="-1" role="dialog" aria-labelledby="addUnidadModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="addUnidadModalLabel">Agregar Unidad</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <div class="modal-body">
+                          <form method="post" id="unidadForm">
+                              {% csrf_token %}
+                              {{ unidad_form.as_p }}
+                              <button type="submit" name="submit_unidad" class="btn btn-primary">Guardar</button>
+                          </form>
+                          <div id="unidadFormErrors"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- Contenedor para el mensaje de éxito -->
+      <div id="successMessage" class="toast-message" style="display:none;"></div>
+     <!-- Modal para añadir Cargo -->
+      <div class="modal fade" id="addCargoModal" tabindex="-1" role="dialog" aria-labelledby="addCargoModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCargoModalLabel">Añadir Cargo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="cargoForm">
+                        {% csrf_token %}
+                        {{ cargo_form.as_p }}
+                        <button type="submit" name="submit_cargo" class="btn btn-primary">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>      
+      <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const fileElem = document.getElementById('id_image');
+          const imagePreview = document.getElementById('image-preview');
+
+          fileElem.addEventListener('change', handleFiles);
+
+          function handleFiles() {
+              const fileList = this.files;
+              if (fileList.length > 0) {
+                  const file = fileList[0];
+                  if (file.type.startsWith('image/')) {
+                      const reader = new FileReader();
+                      reader.readAsDataURL(file);
+                      reader.onloadend = () => {
+                          imagePreview.innerHTML = '<img src="' + reader.result + '" class="img-fluid">';
+                      };
+                  }
+              }
+          }
+      });
+      </script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          var messageBox = document.getElementById('message-box');
+          if (messageBox) {
+            setTimeout(function() {
+              messageBox.style.display = 'none';
+            }, 2000); // Ocultar después de 2 segundos
+          }
+        });
+      </script>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+{% endblock content %}

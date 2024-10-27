@@ -1,0 +1,42 @@
+{% extends 'user/index.html' %}
+{% block content %}
+<br><br>
+<div class="container mt-4">
+    <h2>Lista de Archivos Subidos</h2> 
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Descripción</th>
+                <th>Nombre del Archivo</th>
+                <th>Fecha de Subida</th>
+                <th>Unidad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for descripcion, documentos in documentos_agrupados.items %}
+            <tr>
+                <td colspan="5"><strong>{{ descripcion }}</strong></td>
+            </tr>
+            
+            {% for documento in documentos %}
+                <tr>
+                    <td></td> <!-- Descripción ya mostrada -->
+                    <td>{{ documento.nombre_archivo }}</td>
+                    <td>{{ documento.fecha_subida|date:"d-m-Y" }}</td>
+                    <td>{{ documento.unidad.nombre_unidad }}</td>
+                    <td>
+                        <a href="{% url 'descargar_documento' documento.id %}" class="btn btn-primary btn-sm">Descargar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% empty %}
+            <tr>
+                <td colspan="5">No se encontraron archivos subidos.</td>
+            </tr>
+        {% endfor %}
+        
+        </tbody>
+    </table>
+</div>
+{% endblock %}

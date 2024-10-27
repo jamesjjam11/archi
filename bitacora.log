@@ -1,0 +1,16 @@
+INFO 2024-08-09 09:11:56,356 autoreload Watching for file changes with StatReloader
+INFO 2024-08-09 09:19:35,122 autoreload C:\Users\HP\Desktop\sistema\webArchi\webArchi\settings.py changed, reloading.
+INFO 2024-08-09 09:19:36,097 autoreload Watching for file changes with StatReloader
+INFO 2024-08-09 09:29:53,458 autoreload C:\Users\HP\Desktop\sistema\webArchi\webapp\views.py changed, reloading.
+INFO 2024-08-09 09:29:54,414 autoreload Watching for file changes with StatReloader
+INFO 2024-08-09 09:38:40,127 autoreload C:\Users\HP\Desktop\sistema\webArchi\webapp\models.py changed, reloading.
+INFO 2024-08-09 09:38:41,087 autoreload Watching for file changes with StatReloader
+INFO 2024-08-09 09:40:19,626 autoreload C:\Users\HP\Desktop\sistema\webArchi\webapp\middleware\bitacora_middleware.py changed, reloading.
+INFO 2024-08-09 09:40:20,616 autoreload Watching for file changes with StatReloader
+INFO 2024-08-09 09:42:06,213 autoreload C:\Users\HP\Desktop\sistema\webArchi\webArchi\settings.py changed, reloading.
+INFO 2024-08-09 09:42:07,117 autoreload Watching for file changes with StatReloader
+INFO 2024-08-09 09:43:22,946 autoreload C:\Users\HP\Desktop\sistema\webArchi\webapp\views.py changed, reloading.
+INFO 2024-08-09 09:43:23,891 autoreload Watching for file changes with StatReloader
+INFO 2024-08-09 09:43:43,080 autoreload C:\Users\HP\Desktop\sistema\webArchi\webapp\views.py changed, reloading.
+INFO 2024-08-09 09:43:44,008 autoreload Watching for file changes with StatReloader
+INFO 2024-08-09 09:44:15,541 autoreload C:\Users\HP\Desktop\sistema\webArchi\webArchi\settings.py changed, reloading.

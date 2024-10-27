@@ -1,0 +1,212 @@
+{% extends 'user/index.html' %}
+{% block content %}
+<br><br><br>
+<style>
+    /* Estilo para transformar el texto a mayúsculas en todos los inputs y selects */
+    input[type="text"],
+    input[type="file"],
+    select,
+    textarea {
+        text-transform: uppercase; /* Convierte el texto a mayúsculas */
+    }
+
+    /* Excluir el campo de estado */
+    #id_estado {
+        text-transform: none; /* Mantiene el texto en su forma original */
+    }
+</style>
+<!-- Modal de éxito -->
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Éxito</h5>
+            </div>
+            <div class="modal-body">
+                El documento se ha subido con éxito.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row row-card-no-pd">
+    <div class="col-md-12" style="background-color: #0C6D73;">
+        <div class="card-body">
+            <h2>Registrar Documento</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Sección de Archivo -->
+                <h3>Archivo</h3>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="{{ nombre_archivo.id_for_label }}">Nombre del Archivo:</label>
+                        {{ nombre_archivo }}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="{{ archivo.id_for_label }}">Archivo:</label>
+                        <div class="custom-file">
+                            <input type="file" name="archivo" id="{{ archivo.id_for_label }}" class="custom-file-input">
+                            <label class="custom-file-label" id="fileLabel" for="{{ archivo.id_for_label }}">Seleccionar archivo...</label>
+                        </div>
+                        <div id="filePreview" class="mt-2" style="border: 1px solid #ddd; padding: 10px; display: none;">
+                            <img id="fileIcon" src="" alt="Ícono de archivo" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px; display: none;" />
+                            <span id="fileName"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label for="{{ detalles.id_for_label }}">Descripción:</label>
+                        {{ detalles }}
+                    </div>
+                </div>
+
+                <!-- Sección de Detalles -->
+                <h3>Detalles</h3>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="{{ estado.id_for_label }}">Estado:</label>
+                        {{ estado }}
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="{{ numero_hojas.id_for_label }}">Número de Hojas:</label>
+                        {{ numero_hojas }}
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="{{ tipo_documentacion.id_for_label }}">Tomo:</label>
+                        {{ tipo_documentacion }}
+                    </div>
+                </div>
+
+                <!-- Sección de Ubicación -->
+                <h3>Ubicación</h3>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="{{ ambiente.id_for_label }}">Ambiente:</label>
+                        {{ ambiente }}
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="{{ estante.id_for_label }}">Estante:</label>
+                        {{ estante }}
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="{{ columna.id_for_label }}">Columna:</label>
+                        {{ columna }}
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="{{ balda.id_for_label }}">Balda:</label>
+                        {{ balda }}
+                    </div>
+                </div>
+
+                <!-- Sección de Comprobante -->
+                <h3>Comprobante</h3>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="{{ tipo.id_for_label }}">Tipo:</label>
+                        {{ tipo }}
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="{{ numero.id_for_label }}">Número:</label>
+                        {{ numero }}
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="{{ gestion.id_for_label }}">Gestión:</label>
+                        {{ gestion }}
+                    </div>
+                </div>
+
+                <!-- Sección de Procedencia -->
+                <h3>Procedencia</h3>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="{{ responsable.id_for_label }}">Responsable:</label>
+                        {{ responsable }}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="id_secretaria">Secretaría:</label>
+                        <input type="text" id="id_secretaria" name="secretaria" readonly class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="id_unidad">Unidad:</label>
+                        <select id="id_unidad" name="unidad" class="form-control">
+                            <option value="">Seleccione una unidad</option>
+                            {% for unidad in unidades %}
+                                <option value="{{ unidad.id }}" data-secretaria="{{ unidad.nombre_secretaria.nombre_secretaria }}">
+                                    {{ unidad.nombre_unidad }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" type="submit">Subir Documento</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        {% if messages %}
+            // Mostrar modal si hay un mensaje de éxito
+            $('#successModal').modal('show');
+            setTimeout(function(){
+                $('#successModal').modal('hide');
+            }, 2000);  // 2 segundos de retraso
+
+            // Limpiar el formulario
+            document.getElementById("documentForm").reset();
+            document.getElementById("fileLabel").textContent = "Seleccionar archivo...";
+            document.getElementById("filePreview").style.display = "none";
+        {% endif %}
+    });
+
+    document.getElementById("{{ archivo.id_for_label }}").addEventListener("change", function(event) {
+        const fileInput = event.target;
+        const file = fileInput.files[0];
+        const fileLabel = document.getElementById("fileLabel");
+        const filePreview = document.getElementById("filePreview");
+        const fileIcon = document.getElementById("fileIcon");
+        const fileName = document.getElementById("fileName");
+
+        const iconMap = {
+            'image': 'https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png',
+            'application/pdf': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
+            'application/msword': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
+            'application/vnd.ms-excel': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
+            'text/plain': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
+        };
+
+        if (file) {
+            fileLabel.textContent = file.name;
+            fileName.textContent = file.name;
+
+            const fileType = file.type;
+            let iconUrl = '';
+            if (fileType.startsWith('image/')) {
+                iconUrl = iconMap['image'];
+            } else if (iconMap[fileType]) {
+                iconUrl = iconMap[fileType];
+            } else {
+                iconUrl = 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg';
+            }
+
+            fileIcon.src = iconUrl;
+            fileIcon.style.display = "inline";
+            filePreview.style.display = "block";
+        } else {
+            fileLabel.textContent = "Seleccionar archivo...";
+            filePreview.style.display = "none";
+            fileIcon.style.display = "none";
+        }
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+{% endblock content %}

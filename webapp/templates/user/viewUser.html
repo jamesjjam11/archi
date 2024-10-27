@@ -1,0 +1,80 @@
+{% extends "user/index.html" %}
+{% block content %}
+<br>
+<div class="container mt-4">
+    <div class="page-inner">
+        <h3 class="text-center mb-4">Detalle del Usuario</h3>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <div class="img-thumbnail" style="width: 300px; height: 300px; overflow: hidden;">
+                            {% if user_image %}
+                                <img src="{{ user_image }}" alt="Imagen de usuario">
+                            {% else %}
+                                <img src="/ruta/a/imagen/predeterminada.jpg" alt="Imagen predeterminada">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <h4 class="card-title">Datos Personales</h4>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p><strong>Nombre:</strong> {{ persona.nombre }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Apellido Paterno:</strong> {{ persona.apellido_paterno }}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p><strong>Apellido Materno:</strong> {{ persona.apellido_materno }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>CI:</strong> {{ persona.ci }}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p><strong>Username:</strong> {{ user.username }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Email:</strong> {{ user.email }}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p><strong>Rol:</strong> 
+                                    {% for group in user.groups.all %}
+                                    {{ group.name }}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}</p>
+                            </div>
+                        </div>
+                        <h4 class="card-title">Datos del Cargo</h4>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p><strong>Cargo:</strong> {{ usuario_cargo_unidad.nombre_cargo.nombre_cargo }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Unidad:</strong> {{ usuario_cargo_unidad.nombre_unidad.nombre_unidad }}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p><strong>Secretaría:</strong> {{ usuario_cargo_unidad.nombre_unidad.nombre_secretaria.nombre_secretaria }}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p><strong>Fecha de Registro:</strong> {{ usuario_cargo_unidad.fecha_inicio }}</p>
+                            </div>
+                        </div>
+                        <a class="btn btn-success" href="{% url 'listUser' %}">Atras</a>
+                        <a class="btn btn-primary" href="{% url 'editUser' user.id %}">Editar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

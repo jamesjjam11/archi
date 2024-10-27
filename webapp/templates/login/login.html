@@ -1,0 +1,269 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head class="header">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="/static/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/assets/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/static/assets/css/style.css" rel="stylesheet">
+
+    <title>Gobierno Autonomo Departamental de Potosi</title>
+    <style>
+      /* Luciérnagas */
+      .firefly {
+          position: absolute;
+          width: 5px;
+          height: 5px;
+          background-color: rgba(255, 255, 204, 0.8);
+          border-radius: 50%;
+          box-shadow: 0 0 8px rgba(255, 255, 204, 0.8);
+          animation: fly 20s ease-in-out infinite, glow 2s ease-in-out infinite;
+      }
+
+      @keyframes fly {
+          0% {
+              transform: translate(0, 0) scale(1);
+              opacity: 1;
+          }
+          50% {
+              transform: translate(100vw, -100vh) scale(1.5);
+              opacity: 0.8;
+          }
+          100% {
+              transform: translate(-100vw, 100vh) scale(1);
+              opacity: 1;
+          }
+      }
+
+      @keyframes glow {
+          0%, 100% {
+              opacity: 0.5;
+              box-shadow: 0 0 8px rgba(255, 255, 204, 0.8);
+          }
+          50% {
+              opacity: 1;
+              box-shadow: 0 0 16px rgba(255, 255, 204, 1);
+          }
+      }
+
+      /* Estilos adicionales */
+      .login-container {
+          margin-top: 5%;
+          animation: fadeInUp 1s ease-in-out;
+      }
+
+      .table-sm {
+          font-size: 0.9rem;
+      }
+
+      .table-sm td,
+      .table-sm th {
+          padding: 0.5rem;
+      }
+
+      .btn-sm {
+          font-size: 0.75rem;
+          padding: 0.25rem 0.5rem;
+      }
+
+      body {
+          background-color:  #0C6D73;
+          overflow: hidden; /* Oculta el scroll para no ver las barras */
+      }
+
+      header {
+          background-color: #0e9097; 
+          color: white; 
+          padding: 20px 0;  
+          animation: slideDown 1s ease-out;
+      }
+
+      .small-image {
+          width: 150px;
+          border-radius: 10px;
+          height: auto;
+          animation: fadeIn 2s ease-in;
+      }
+
+      footer {
+          background-color:#2A4F62;
+          color: white;
+          text-align: center;
+          padding: 10px 0;
+          position: fixed;
+          width: 100%;
+          bottom: 0;
+      }
+
+      .card {
+          background-color:  #096267; 
+          color: rgb(235, 228, 228);
+          animation: scaleUp 0.7s ease-in-out;
+      }
+
+      .form-control {
+          background-color:  #6DA5C0;
+          border: 1px solid white;
+      }
+
+      .form-control::placeholder {
+          color: white;
+      }
+
+      .btn-primary {
+          background-color: #6DA5C0;
+          border-color: white;
+          animation: bounceIn 0.5s ease-out;
+      }
+
+      .text-center a {
+          color: white;
+          text-align: center;
+      }
+
+      .card-header {
+          background-color: #a19981; 
+          color: black;
+      }
+
+      .form-group1 {
+        color: white;
+        text-align: center;
+      }
+
+      /* Animaciones */
+
+      @keyframes slideDown {
+        0% {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+      }
+
+      @keyframes scaleUp {
+        0% {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+      }
+
+      @keyframes bounceIn {
+        0% {
+            transform: scale(0.5);
+            opacity: 0;
+        }
+        60% {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1);
+        }
+      }
+
+      @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+      }
+
+      @keyframes fadeInUp {
+        0% {
+            transform: translateY(50px);
+            opacity: 0;
+        }
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+      }
+
+    </style>
+  </head>
+  <body>
+    <!-- Luciérnagas -->
+    <div class="firefly" style="top: 20%; left: 30%;"></div>
+    <div class="firefly" style="top: 50%; left: 60%;"></div>
+    <div class="firefly" style="top: 70%; left: 20%;"></div>
+    <div class="firefly" style="top: 90%; left: 80%;"></div>
+    <div class="firefly" style="top: 10%; left: 70%;"></div>
+    
+    {% block content %}
+    <header>
+      <div class="row justify-content-center mt-4">
+          <div class="col-md-6 text-center">
+              
+          </div>
+      </div>
+    </header>
+    <div class="container">
+      <div class="row justify-content-center login-container">
+          <div class="col-md-6">
+              <div class="card">
+                  <div class="card-body">
+                    <form action="{% url 'login' %}" method="POST">
+                        {% csrf_token %}
+                        
+                        <!-- Mostrar errores generales, como usuario o contraseña incorrectos -->
+                        {% if form.non_field_errors %}
+                          <div class="alert alert-danger text-center" role="alert">
+                            {{ form.non_field_errors }}
+                          </div>
+                        {% endif %}
+                      
+                        <div class="form-group1">
+                          <label for="username">Usuario</label>
+                          <input type="text" class="form-control" id="username" name="username" placeholder="Ingrese su usuario">
+                          <!-- Mostrar errores específicos del campo usuario -->
+                          {% if form.username.errors %}
+                            <div class="text-danger">
+                              {{ form.username.errors }}
+                            </div>
+                          {% endif %}
+                        </div>
+                        
+                        <div class="form-group1">
+                          <label for="password">Contraseña</label>
+                          <input type="password" class="form-control" id="password" name="password" placeholder="Ingrese su contraseña">
+                          <!-- Mostrar errores específicos del campo contraseña -->
+                          {% if form.password.errors %}
+                            <div class="text-danger">
+                              {{ form.password.errors }}
+                            </div>
+                          {% endif %}
+                        </div>
+                        <div class="text-center">
+                          <button type="submit" class="btn btn-primary">Ingresar</button>
+                        </div>
+                      </form>
+                      
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </body>
+  <footer class="footer">
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-6 text-center">
+            <img src="/static/assets/images/logo 2 Letra Blanca.png" alt="Imagen descriptiva" class="img-fluid small-image">
+        </div>
+    </div>
+  </footer>
+  {% endblock %}
+</html>

@@ -1,0 +1,153 @@
+{% extends 'user/index.html' %}
+{% block content %}
+<br><br>
+<div class="card-body">
+        <div class="container mt-4">
+        <div class="table-responsive-lg">
+            <br>
+            <h3 class="text-center mb-2">Lista de usuarios</h3>
+            <div class="container mt-4">
+                <div class="row mb-3">
+                    <div class="col-md-4 offset-md-8">
+                        <form method="GET" action="">
+                            <div class="input-group">
+                                <input type="text" name="q" class="form-control" placeholder="Buscar usuario..." value="{{ query }}">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <table class="table table-hover table-striped table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Usuario</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellido</th>
+                            <th scope="col">CI</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Cargo</th>
+                            <th scope="col">Unidad</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in usuarios %}
+                        <tr class="small">
+                            <td scope="row">{{ usuario.username }}</td>
+                            <td>{{ usuario.persona.nombre }}</td>
+                            <td>{{ usuario.persona.apellido_paterno }}</td>
+                            <td>{{ usuario.persona.ci }}</td>
+                            <td>{{ usuario.email }}</td>
+                            <td>
+                                {% for ucu in usuario_cargo_unidad %}
+                                    {% if ucu.user_id == usuario.id %}
+                                        {{ ucu.nombre_cargo.nombre_cargo }}<br>
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for ucu in usuario_cargo_unidad %}
+                                    {% if ucu.user_id == usuario.id %}
+                                        {{ ucu.nombre_unidad.nombre_unidad }}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td class="text-center">
+                                <a class="btn btn-success" href="{% url 'viewUser' usuario.id %}"><i class="icon-picture"></i></a>
+                                <a class="btn btn-primary btn-sm" href="{% url 'editUser' usuario.id %}"><i class="icon-pencil"></i></a>
+                                <a class="btn btn-danger" href="#" data-toggle="modal" data-target="#darDeBajaModal" data-user-id="{{ usuario.id }}" data-username="{{ usuario.username }}"><i class="icon-trash"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginador -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    {% if usuarios.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1&q={{ query }}" aria-label="First">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ usuarios.previous_page_number }}&q={{ query }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% for i in usuarios.paginator.page_range %}
+                        {% if usuarios.number == i %}
+                            <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{ i }}&q={{ query }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if usuarios.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ usuarios.next_page_number }}&q={{ query }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ usuarios.paginator.num_pages }}&q={{ query }}" aria-label="Last">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="darDeBajaModal" tabindex="-1" role="dialog" aria-labelledby="darDeBajaModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="darDeBajaModalLabel">Confirmar Baja de Usuario</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas dar de baja al usuario <strong id="usernameInModal"></strong>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <form method="POST" id="darDeBajaForm">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Sí, dar de baja</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#darDeBajaModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var userId = button.data('user-id');
+                var username = button.data('username');
+
+                var modal = $(this);
+                modal.find('#usernameInModal').text(username);
+                modal.find('#darDeBajaForm').attr('action', '{% url "dar_de_baja_usuario" 0 %}'.replace('0', userId));
+            });
+        });
+    </script>
+</div>
+
+
+{% endblock %}

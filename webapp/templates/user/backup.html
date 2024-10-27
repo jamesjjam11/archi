@@ -1,0 +1,66 @@
+{% extends 'user/index.html' %}
+{% block content %}
+<br><br><br>
+<h2>Copias de Seguridad</h2>
+<form id="backupForm" action="{% url 'backup_database' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Generar y Descargar Copia de Seguridad</button>
+</form>
+
+<!-- Modal para mostrar el mensaje -->
+<div id="messageModal" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Resultado</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="modalMessage"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('backupForm').onsubmit = function(event) {
+    event.preventDefault();
+    const formData = new FormData(this);
+    fetch(this.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('modalMessage').textContent = data.message;
+        $('#messageModal').modal('show');
+    })
+    .catch(error => {
+        document.getElementById('modalMessage').textContent = 'Error al procesar la solicitud.';
+        $('#messageModal').modal('show');
+    });
+};
+
+// Cierra el modal cuando el usuario hace clic en el botón "Cerrar"
+$('#messageModal').on('hidden.bs.modal', function () {
+    // Aquí puedes agregar cualquier acción que desees realizar después de que el modal se cierre
+    document.getElementById('modalMessage').textContent = '';
+});
+
+document.querySelector('.close').addEventListener('click', function() {
+    $('#messageModal').modal('hide');
+});
+
+document.querySelector('.btn-secondary').addEventListener('click', function() {
+    $('#messageModal').modal('hide');
+});
+</script>
+{% endblock %}

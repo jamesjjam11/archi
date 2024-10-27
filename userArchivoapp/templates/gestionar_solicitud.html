@@ -1,0 +1,14 @@
+{% extends 'user/index.html' %}
+{% block content %}
+<br><br><br>
+    <h2>Gestionar Solicitud</h2>
+    <p>Solicitud de: {{ solicitud.usuario }}</p>
+    <p>Documento solicitado: {{ solicitud.documento }}</p>
+    <p>Motivo: {{ solicitud.motivo_solicitud }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+    </form>
+{% endblock %}

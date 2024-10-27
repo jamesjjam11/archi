@@ -1,0 +1,29 @@
+{% extends 'user/index.html' %}
+
+{% block content %}
+<div class="container">
+   
+    <h1>Reporte del Documento Subido</h1>
+    <p><strong>Nombre del archivo:</strong> {{ documento.nombre_archivo }}</p>
+    <p><strong>Detalles:</strong> {{ documento.detalles }}</p>
+    <p><strong>Estado:</strong> {{ documento.estado }}</p>
+    <p><strong>Número de Hojas:</strong> {{ documento.numero_hojas }}</p>
+    <p><strong>Tipo de Documentación:</strong> {{ documento.tipo_documentacion }}</p>
+    <p><strong>Ubicación:</strong></p>
+    <ul>
+        <li><strong>Ambiente:</strong> {{ documento.ambiente }}</li>
+        <li><strong>Estante:</strong> {{ documento.estante }}</li>
+        <li><strong>Columna:</strong> {{ documento.columna }}</li>
+        <li><strong>Balda:</strong> {{ documento.balda }}</li>
+    </ul>
+    <p><strong>Tipo:</strong> {{ documento.tipo }}</p>
+    <p><strong>Número:</strong> {{ documento.numero }}</p>
+    <p><strong>Gestión:</strong> {{ documento.gestion }}</p>
+    <p><strong>Responsable:</strong> {{ documento.responsable }}</p>
+    
+    <h2>Archivo Subido</h2>
+    <a href="{{ documento.archivo.url }}" target="_blank">Descargar archivo</a>
+    
+    <a href="{% url 'subir_documento' %}">Subir otro documento</a>
+</div>
+{% endblock content %}
