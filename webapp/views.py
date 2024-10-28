@@ -63,6 +63,7 @@ def register_user(request):
         'secretaria_form': secretaria_form,
         'unidad_form': unidad_form,
         'cargo_form': cargo_form,
+        'user_roles': request.user_roles,
     }
 
     if request.method == 'POST':

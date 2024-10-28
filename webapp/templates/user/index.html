@@ -96,7 +96,7 @@
                 <h4 class="text-section">Inicio</h4>
               </li>
               <!-- Pestañas visibles solo para SuperAdmin -->
-              {% if 'SuperAdmin' in user_roles %}
+              {% if 'SuperAdmin' in request.user_roles %}
               <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#base">
                   <i class="fas fa-user"></i>
@@ -120,7 +120,7 @@
               </li>
               {% endif %}
               <!-- Pestañas visibles solo para SuperAdmin y Admin -->
-              {% if 'SuperAdmin' in user_roles or 'Admin' in user_roles %}
+              {% if 'SuperAdmin' in request.user_roles or 'Admin' in request.user_roles %}
               <li class="nav-item">
                 <a href="{% url 'list_bitacora' %}">
                   <i class="far fa-chart-bar"></i>
@@ -128,7 +128,7 @@
                 </a>
               </li>
               {% endif %}
-              {% if 'SuperAdmin' in user_roles %}
+              {% if 'SuperAdmin' in request.user_roles %}
               <li class="nav-item">
                 <a href="{% url 'listar_secretarias' %}">
                   <i class="fas fa-desktop"></i>
@@ -137,7 +137,7 @@
               </li>
               {% endif%}
               <!-- Pestañas visibles solo para SuperAdmin y Admin -->
-              {% if 'SuperAdmin' in user_roles or 'Admin' in user_roles %}
+              {% if 'SuperAdmin' in request.user_roles or 'Admin' in request.user_roles %}
               <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#submenu">
                   <i class="fas fa-bars"></i>
@@ -161,7 +161,7 @@
               </li>
               {% endif %}
 
-              {% if 'Admin' in user_roles or 'UserArchivo' in user_roles or 'SuperAdmin' in user_roles %}
+              {% if 'Admin' in request.user_roles or 'UserArchivo' in request.user_roles or 'SuperAdmin' in request.user_roles or 'UserPersonal' in request.user_roles %}
               <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#documentos">
                     <i class="icon-doc"></i>
@@ -170,9 +170,11 @@
                 </a>
                 <div class="collapse" id="documentos">
                     <ul class="nav nav-collapse">
+                      {% if 'SuperAdmin' in request.user_roles or 'Admin' in request.user_roles  or 'UserArchivo' in request.user_roles %}
                         <li>
                             <a href="{% url 'subir_documento' %}">Registrar Documentos</a>
                         </li>
+                      {% endif %}
                         <li>
                             <a href="{% url 'lista_archivos' %}">Listar Documentos</a>
                         </li>
@@ -182,7 +184,7 @@
                     </ul>
                 </div>
               </li>
-              
+              {% if 'SuperAdmin' in request.user_roles or 'Admin' in request.user_roles  or 'UserArchivo' in request.user_roles %}
               <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#soli">
                   <i class="fas fa-receipt"></i>
@@ -202,7 +204,8 @@
                 </div>
               </li>
               {% endif %}
-              {% if 'UserPersonal' in user_roles %}
+              {% endif %}
+              {% if 'UserPersonal' in request.user_roles %}
               <li class="nav-item">
                 <a href="{% url 'solicitar_prestamo' %}">
                   <i class="fas fa-clipboard-list"></i>
@@ -210,7 +213,7 @@
                 </a>
               </li>
               {% endif %}
-              {% if 'SuperAdmin' in user_roles or 'Admin' in user_roles %}
+              {% if 'SuperAdmin' in request.user_roles or 'Admin' in request.user_roles %}
                 {% if documento_id %}
                 <li class="nav-item">
                   <a href="{% url 'reporte_documento' documento_id %}">
@@ -233,7 +236,7 @@
                 </a>
               </li>
              {% endif %} 
-              {% if 'SuperAdmin' in user_roles %}
+              {% if 'SuperAdmin' in request.user_roles %}
               <li class="nav-item">
                 <form method="POST" action="{% url 'backup_database' %}" id="backup-form">
                   {% csrf_token %}

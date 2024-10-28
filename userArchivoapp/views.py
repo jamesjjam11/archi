@@ -20,6 +20,8 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from collections import defaultdict
 from itertools import groupby
 from operator import attrgetter
+from django.utils import timezone
+from datetime import timedelta
 
 
 
@@ -278,10 +280,28 @@ def reporte_documento(request, documento_id):
     # Renderizar la plantilla del reporte
     return render(request, 'reporte_documento.html', context)
 
+@never_cache
 @login_required
 def lista_reportes(request):
-    documentos = Documento.objects.all().order_by('-fecha_subida')  # Ordena por la fecha de subida
-    return render(request, 'lista_reportes.html', {'documentos': documentos})
+    filtro = request.GET.get('filtro', 'dia')
+    fecha_inicio = request.GET.get('fecha_inicio', None)
+    fecha_fin = request.GET.get('fecha_fin', None)
+    documentos = Documento.objects.all()
+
+    if filtro == 'dia':
+        documentos = documentos.filter(fecha_subida__date=timezone.now().date())
+    elif filtro == 'semana':
+        documentos = documentos.filter(fecha_subida__gte=timezone.now() - timedelta(weeks=1))
+    elif filtro == 'mes':
+        documentos = documentos.filter(fecha_subida__gte=timezone.now() - timedelta(days=30))
+    elif filtro == 'rango' and fecha_inicio and fecha_fin:
+        fecha_inicio = timezone.datetime.strptime(fecha_inicio, '%Y-%m-%d').date()
+        fecha_fin = timezone.datetime.strptime(fecha_fin, '%Y-%m-%d').date()
+        documentos = documentos.filter(fecha_subida__date__range=(fecha_inicio, fecha_fin))
+
+    documentos = documentos.order_by('-fecha_subida')
+    return render(request, 'lista_reportes.html', {'documentos': documentos, 'filtro': filtro})
+
 login_required
 def descargar_reporte(request, documento_id):
     # Obtener el documento por ID

@@ -49,9 +49,11 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'webapp.middleware.add_user_roles_middleware.AddUserRolesToContextMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'webapp.middleware.bitacora_middleware.BitacoraMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'webArchi.urls'

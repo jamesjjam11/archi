@@ -3,15 +3,35 @@
 {% block content %}
   <div class="container mt-5">
     <h2>Lista de Reportes</h2>
+
+    <!-- Selección de filtros de fecha -->
+    <div class="mb-3">
+      <div class="col-md-12">
+        <h4>Reportes por:</h4>
+        <a href="?filtro=dia" class="btn btn-primary {% if filtro == 'dia' %}active{% endif %}">Día</a>
+        <a href="?filtro=semana" class="btn btn-primary {% if filtro == 'semana' %}active{% endif %}">Semana</a>
+        <a href="?filtro=mes" class="btn btn-primary {% if filtro == 'mes' %}active{% endif %}">Mes</a>
+      </div>
+      <div class="col-md-6">
+        <h4>Seleccione la fecha o rango para ver los reportes</h4>
+        <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control mb-2 d-inline-block w-auto">
+        <input type="date" id="fecha_fin" name="fecha_fin" class="form-control mb-2 d-inline-block w-auto">
+        <button onclick="filtrarRango()" class="btn btn-primary">Aplicar Rango</button>
+      </div>
+      <div class="col-md-12">
+        <button onclick="window.print()" class="btn btn-secondary">Imprimir Reporte</button>
+      </div>
+    </div>
     <table class="table table-striped">
-      <thead>
+      <thead>  
         <tr>
           <th>#</th>
           <th>Nombre del Archivo</th>
+          <th>Subido Por</th>
           <th>Responsable</th>
-          <th>Estado</th>
+          <th>Ubicación</th>
           <th>Fecha de Subida</th>
-          <th>Acciones</th>
+          <th class="no-print">Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -19,20 +39,51 @@
         <tr>
           <td>{{ forloop.counter }}</td>
           <td>{{ documento.nombre_archivo }}</td>
+          <td>{{ documento.subido_por.get_full_name }}</td>
           <td>{{ documento.responsable }}</td>
-          <td>{{ documento.estado }}</td>
+          <td>{{ documento.ubicacion }}</td>
           <td>{{ documento.fecha_subida }}</td>
-          <td>
+          <td class="no-print">
             <a href="{% url 'reporte_documento' documento.id %}" class="btn btn-info">Ver Reporte</a>
             <a href="{% url 'descargar_reporte' documento.id %}" class="btn btn-success">Descargar Reporte</a>
           </td>
         </tr>
         {% empty %}
         <tr>
-          <td colspan="6">No hay reportes disponibles.</td>
+          <td colspan="7">No hay reportes disponibles.</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
+
+  <script>
+    function filtrarRango() {
+      const fechaInicio = document.getElementById('fecha_inicio').value;
+      const fechaFin = document.getElementById('fecha_fin').value;
+      if (fechaInicio && fechaFin) {
+        window.location.href = `?filtro=rango&fecha_inicio=${fechaInicio}&fecha_fin=${fechaFin}`;
+      }
+    }
+  </script>
+
+  <style>
+    /* Estilos específicos para impresión */
+    @media print {
+      .no-print, .btn, .mb-3 {
+        display: none;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      table, th, td {
+        border: 1px solid black;
+      }
+      th, td {
+        padding: 8px;
+        text-align: left;
+      }
+    }
+  </style>
 {% endblock %}

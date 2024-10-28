@@ -7,6 +7,8 @@
       <div class="col-md-12">
         <div class="card">
           <div class="card-body">
+            <p>User roles: {{ user_roles }}</p>
+
             <!-- Botón para abrir el modal de Registrar Secretaria -->
             <button type="button"  style="width: 200px; background-color: #6DA5C0; border-color: white;" data-toggle="modal" data-target="#addSecretariaModal">Registrar Secretaría</button>
             <!-- Botón para abrir el modal de Registrar Unidad -->
@@ -23,7 +25,7 @@
               {{ message }}
             {% endfor %}
           </div>
-        {% endif %}
+          {% endif %}
           <div class="card-body pt-0">
             <!-- Formulario combinado -->
             <form method="post" id="combinedForm" enctype="multipart/form-data">
