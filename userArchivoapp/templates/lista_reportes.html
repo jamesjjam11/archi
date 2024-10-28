@@ -5,7 +5,7 @@
     <h2>Lista de Reportes</h2>
 
     <!-- Selección de filtros de fecha -->
-    <div class="mb-3">
+    <div class="mb-3 no-print">
       <div class="col-md-12">
         <h4>Reportes por:</h4>
         <a href="?filtro=dia" class="btn btn-primary {% if filtro == 'dia' %}active{% endif %}">Día</a>
@@ -22,6 +22,7 @@
         <button onclick="window.print()" class="btn btn-secondary">Imprimir Reporte</button>
       </div>
     </div>
+
     <table class="table table-striped">
       <thead>  
         <tr>
@@ -56,22 +57,16 @@
       </tbody>
     </table>
   </div>
-
-  <script>
-    function filtrarRango() {
-      const fechaInicio = document.getElementById('fecha_inicio').value;
-      const fechaFin = document.getElementById('fecha_fin').value;
-      if (fechaInicio && fechaFin) {
-        window.location.href = `?filtro=rango&fecha_inicio=${fechaInicio}&fecha_fin=${fechaFin}`;
-      }
-    }
-  </script>
-
   <style>
     /* Estilos específicos para impresión */
     @media print {
-      .no-print, .btn, .mb-3 {
-        display: none;
+      .no-print, .btn, .mb-3, header, nav, aside {
+        display: none !important;
+      }
+      .container {
+        margin: 0 auto;
+        padding: 0;
+        width: 60%; /* Reduce el ancho al 60% para centrarlo aún más */
       }
       table {
         width: 100%;
@@ -85,5 +80,5 @@
         text-align: left;
       }
     }
-  </style>
+  </style>  
 {% endblock %}

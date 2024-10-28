@@ -238,37 +238,37 @@ def registrar_devolucion_modal(request, prestamo_id):
         form = DevolucionForm(instance=prestamo)
         html_form = render_to_string('partial_devolucion_form.html', {'form': form}, request)
         return JsonResponse({'html': html_form})
-    
 @never_cache
-@login_required 
-def buscar_documentos(request):
-    comprobante = request.GET.get('comprobante', '')
-    gestion = request.GET.get('gestion', '')
-    nombre = request.GET.get('nombre', '')
-
-    resultados = Documento.objects.all()
-
-    # Filtrado de resultados
-    if comprobante or gestion or nombre:
-        if comprobante:
-            resultados = resultados.filter(numero__icontains=comprobante)
-        if gestion:
-            resultados = resultados.filter(gestion__icontains=gestion)
-        if nombre:
-            resultados = resultados.filter(nombre_archivo__icontains=nombre)
-
-    context = {
-        'resultados': resultados,
-        'comprobante': comprobante,
-        'gestion': gestion,
-        'nombre': nombre,
-    }
-
-    return render(request, 'buscar_documentos.html', context)
-
-
 @login_required
-def reporte_documento(request, documento_id):
+def buscar_documentos(request):
+    query = request.GET.get('query', '')
+    comprobante = request.GET.get('comprobante', '')
+    fecha_subida = request.GET.get('fecha_subida', '')
+    año = request.GET.get('año', '')
+    
+    resultados = Documento.objects.all()
+    
+    if query:
+        resultados = resultados.filter(nombre_archivo__icontains=query)
+
+    if comprobante:
+        resultados = resultados.filter(comprobante__icontains=comprobante)
+        
+    if fecha_subida:
+        resultados = resultados.filter(fecha_subida=fecha_subida)  # Asegúrate de que el campo sea DateField
+
+    if año:
+        resultados = resultados.filter(fecha_subida__year=año)  # Filtra por el año de la fecha de subida
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        html = render_to_string('_resultados_busqueda.html', {'resultados': resultados})
+        return JsonResponse({'html': html})
+
+    return render(request, 'buscar_documentos.html', {'resultados': resultados})
+
+@never_cache
+@login_required
+def reporte_documento(request, documento_id):   
     # Obtener el documento subido por su ID
     documento = get_object_or_404(Documento, id=documento_id)
     

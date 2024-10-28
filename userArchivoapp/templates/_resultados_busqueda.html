@@ -1,0 +1,34 @@
+{% if resultados %}
+    <table class="table-hover" style="background-color: #6DA5C0;">
+        <thead>
+            <tr>
+                <th>Nombre del Archivo</th>
+                <th>Usuario</th>
+                <th>Secretaría</th>
+                <th>Unidad</th>
+                <th>Fecha de Subida</th>
+                <th>Estado</th>
+                <th>Número de Hojas</th>
+                <th>Tipo de Documentación</th>
+                <th>Gestión</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for documento in resultados %}
+            <tr>
+                <td>{{ documento.nombre_archivo }}</td>
+                <td>{{ documento.usuario.username }}</td>
+                <td>{{ documento.secretaria }}</td>
+                <td>{{ documento.unidad }}</td>
+                <td>{{ documento.fecha_subida }}</td>
+                <td>{{ documento.estado }}</td>
+                <td>{{ documento.numero_hojas }}</td>
+                <td>{{ documento.tipo_documentacion }}</td>
+                <td>{{ documento.gestion }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No se encontraron documentos.</p>
+{% endif %}

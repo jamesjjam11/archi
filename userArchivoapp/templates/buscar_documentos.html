@@ -3,69 +3,31 @@
 <br><br><br>
 <div class="card-body">
     <h1>Búsqueda de Documentos</h1>
-        
     <form method="GET" action="{% url 'buscar_documentos' %}" id="form-busqueda">
         <div class="search-box">
-            <h2>Buscar por Comprobante</h2>
-            <input type="text" name="comprobante" value="{{ comprobante }}" placeholder="Ingrese el comprobante">
+            <input type="text" id="search-input" name="query" placeholder="Buscar documentos..." autocomplete="off">
+            <input type="text" name="comprobante" placeholder="Comprobante" style="display:none;">
+            <input type="date" name="fecha_subida" style="display:none;">
+            <input type="number" name="anio" placeholder="Año" style="display:none;">
         </div>
-
-        <div class="search-box">
-            <h2>Buscar por Gestión</h2>
-            <input type="text" name="gestion" value="{{ gestion }}" placeholder="Ingrese la gestión">
-        </div>
-
-        <div class="search-box">
-            <h2>Buscar por Nombre del Archivo</h2>
-            <input type="text" name="nombre" value="{{ nombre }}" placeholder="Ingrese el nombre del archivo">
-        </div>
-
         <button type="submit">Buscar</button>
     </form>
-
-    {% if resultados %}
-        <h2>Resultados de la búsqueda:</h2>
-        <table class="table-hover" style="background-color: #6DA5C0;">
-            <thead>
-                <tr>
-                    <th>Nombre del Archivo</th>
-                    <th>Usuario</th>
-                    <th>Secretaría</th>
-                    <th>Unidad</th>
-                    <th>Fecha de Subida</th>
-                    <th>Estado</th>
-                    <th>Número de Hojas</th>
-                    <th>Tipo de Documentación</th>
-                    <th>Gestión</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for documento in resultados %}
-                <tr>
-                    <td>{{ documento.nombre_archivo }}</td>
-                    <td>{{ documento.usuario.username }}</td>
-                    <td>{{ documento.secretaria }}</td>
-                    <td>{{ documento.unidad }}</td>
-                    <td>{{ documento.fecha_subida }}</td>
-                    <td>{{ documento.estado }}</td>
-                    <td>{{ documento.numero_hojas }}</td>
-                    <td>{{ documento.tipo_documentacion }}</td>
-                    <td>{{ documento.gestion }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No se encontraron documentos.</p>
-    {% endif %}
+    
+    <div id="resultados">
+    </div>
 </div>
-
 <script>
-    // Borrar los campos del formulario después de enviar el formulario
-    document.getElementById('form-busqueda').addEventListener('submit', function() {
-        setTimeout(function() {
-            document.getElementById('form-busqueda').reset();  // Limpiar el formulario
-        }, 100);  // Esperar un poco antes de limpiar los campos
-    });
+    document.getElementById('search-input').addEventListener('keyup', function() {
+    const query = this.value;
+    fetch(`/userArchivoapp/buscar_documentos/?query=${query}`, {
+        headers: { 'x-requested-with': 'XMLHttpRequest' }
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('resultados').innerHTML = data.html;
+    })
+    .catch(error => console.error('Error en la búsqueda:', error));
+});
+
 </script>
 {% endblock content %}
