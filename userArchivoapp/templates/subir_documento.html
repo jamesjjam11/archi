@@ -1,6 +1,6 @@
 {% extends 'user/index.html' %}
 {% block content %}
-<br><br><br>
+<br><br>
 <style>
     /* Estilo para transformar el texto a mayúsculas en todos los inputs y selects */
     input[type="text"],
@@ -29,182 +29,356 @@
     </div>
 </div>
 
-<div class="row row-card-no-pd">
-    <div class="col-md-12" style="background-color: #0C6D73;">
-        <div class="card-body">
-            <h2>Registrar Documento</h2>
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                
-                <!-- Sección de Archivo -->
-                <h3>Archivo</h3>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="{{ nombre_archivo.id_for_label }}">Nombre del Archivo:</label>
-                        {{ nombre_archivo }}
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="{{ archivo.id_for_label }}">Archivo:</label>
-                        <div class="custom-file">
-                            <input type="file" name="archivo" id="{{ archivo.id_for_label }}" class="custom-file-input">
-                            <label class="custom-file-label" id="fileLabel" for="{{ archivo.id_for_label }}">Seleccionar archivo...</label>
+<div class="container">
+    <div class="page-inner">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="col-md-12" style="background-color: #0C6D73;">
+                        <div class="card-body">
+                            <div class="card-header card-header-primary">
+                                <h2 class="card-title" style="color: white;">Registrar Documento</h2>
+                            </div>
+                        <div class="card-body pt-0">
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <!-- Sección de Archivo -->
+                                <h3 class="mb-3">Archivo</h3>
+                                <div class="form-row">
+                                    <div class="col-md-7">
+                                        <div class="form-row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="bmd-label-floating" for="{{ nombre_archivo.id_for_label }}">Nombre del Archivo:</label>
+                                                    <input type="{{ nombre_archivo.field.widget.input_type }}" 
+                                                           name="{{ nombre_archivo.name }}" 
+                                                           id="{{ nombre_archivo.id_for_label }}" 
+                                                           class="form-control" 
+                                                           value="{{ nombre_archivo.value|default_if_none:'' }}">
+                                                           
+                                                    {% if nombre_archivo.errors %}
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ nombre_archivo.errors }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>                                                
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                <label for="{{ archivo.id_for_label }}">Archivo:</label>
+                                                <div class="custom-file">
+                                                    <input type="file" name="archivo" id="{{ archivo.id_for_label }}" class="custom-file-input">
+                                                    <label class="custom-file-label" id="fileLabel" for="{{ archivo.id_for_label }}">Seleccionar archivo...</label>
+                                                </div>
+                                                <div id="filePreview" class="mt-2" style="border: 1px solid #ddd; padding: 10px; display: none;">
+                                                    <img id="fileIcon" src="" alt="Ícono de archivo" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px; display: none;" />
+                                                    <span id="fileName"></span>
+                                                </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group col-md-6" style="width: 50px;">
+                                                    <label for="{{ detalles.id_for_label }}">Descripción:</label>
+                                                    {{ detalles }}
+                                                </div>
+                                            </div>                          
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Sección de Detalles -->
+                                <h3 class="mb-3">Detalles</h3>
+                                <div class="form-row">
+                                    <div class="col-md-7">
+                                        <div class="form-row">
+                                            <!-- Campo Estado -->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="{{ estado.id_for_label }}">Estado:</label>
+                                                    {{ estado }}
+                                                </div>    
+                                            </div>
+                                            <!-- Campo Número de Hojas -->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="bmd-label-floating" for="{{ numero_hojas.id_for_label }}">Número de Hojas:</label>
+                                                    <input type="{{ numero_hojas.field.widget.input_type }}" 
+                                                           name="{{ numero_hojas.name }}" 
+                                                           id="{{ numero_hojas.id_for_label }}" 
+                                                           class="form-control" 
+                                                           value="{{ numero_hojas.value|default_if_none:'' }}">
+                                                    
+                                                    {% if numero_hojas.errors %}
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ numero_hojas.errors }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>    
+                                            </div>
+                                        
+                                            <!-- Campo Tomo -->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="bmd-label-floating" for="{{ tipo_documentacion.id_for_label }}">Tomo:</label>
+                                                    <input type="{{ tipo_documentacion.field.widget.input_type }}" 
+                                                           name="{{ tipo_documentacion.name }}" 
+                                                           id="{{ tipo_documentacion.id_for_label }}" 
+                                                           class="form-control" 
+                                                           value="{{ tipo_documentacion.value|default_if_none:'' }}">
+                                                    
+                                                    {% if tipo_documentacion.errors %}
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ tipo_documentacion.errors }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div> 
+                                        </div>                                        
+                                    </div>
+                                </div>
+                                <!-- Sección de Ubicación -->
+                                <h3 class="mb-3">Ubicación</h3>
+                                <div class="form-row">
+                                    <div class="col-md-7">
+                                        <div class="form-row">
+                                            <!-- Campo Ambiente -->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="{{ ambiente.id_for_label }}">Ambiente:</label>
+                                                    <input type="{{ ambiente.field.widget.input_type }}" 
+                                                           name="{{ ambiente.name }}" 
+                                                           id="{{ ambiente.id_for_label }}" 
+                                                           class="form-control" 
+                                                           value="{{ ambiente.value|default_if_none:'' }}">
+                                                           
+                                                    {% if ambiente.errors %}
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ ambiente.errors }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <!-- Campo Estante -->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="{{ estante.id_for_label }}">Estante:</label>
+                                                    <input type="{{ estante.field.widget.input_type }}" 
+                                                           name="{{ estante.name }}" 
+                                                           id="{{ estante.id_for_label }}" 
+                                                           class="form-control" 
+                                                           value="{{ estante.value|default_if_none:'' }}">
+                                                           
+                                                    {% if estante.errors %}
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ estante.errors }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <!-- Campo Columna -->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="{{ columna.id_for_label }}">Columna:</label>
+                                                    <input type="{{ columna.field.widget.input_type }}" 
+                                                           name="{{ columna.name }}" 
+                                                           id="{{ columna.id_for_label }}" 
+                                                           class="form-control" 
+                                                           value="{{ columna.value|default_if_none:'' }}">
+                                                           
+                                                    {% if columna.errors %}
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ columna.errors }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <!-- Campo Balda -->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="{{ balda.id_for_label }}">Balda:</label>
+                                                    <input type="{{ balda.field.widget.input_type }}" 
+                                                           name="{{ balda.name }}" 
+                                                           id="{{ balda.id_for_label }}" 
+                                                           class="form-control" 
+                                                           value="{{ balda.value|default_if_none:'' }}">
+                                                           
+                                                    {% if balda.errors %}
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ balda.errors }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>                                         
+                                    </div> 
+                                </div>
+
+                                <!-- Sección de Comprobante -->
+                                <h3>Comprobante</h3>
+                                <div class="form-row">
+                                    <div class="col-md-7">
+                                        <div class="form-row">
+                                            <!-- Campo Tipo -->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="{{ tipo.id_for_label }}">Tipo:</label>
+                                                    <input type="{{ tipo.field.widget.input_type }}" 
+                                                           name="{{ tipo.name }}" 
+                                                           id="{{ tipo.id_for_label }}" 
+                                                           class="form-control" 
+                                                           value="{{ tipo.value|default_if_none:'' }}">
+                                                           
+                                                    {% if tipo.errors %}
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ tipo.errors }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        
+                                            <!-- Campo Número -->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="{{ numero.id_for_label }}">Número:</label>
+                                                    <input type="{{ numero.field.widget.input_type }}" 
+                                                           name="{{ numero.name }}" 
+                                                           id="{{ numero.id_for_label }}" 
+                                                           class="form-control" 
+                                                           value="{{ numero.value|default_if_none:'' }}">         
+                                                    {% if numero.errors %}
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ numero.errors }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <!-- Campo Gestión -->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="{{ gestion.id_for_label }}">Gestión:</label>
+                                                    <input type="{{ gestion.field.widget.input_type }}" 
+                                                           name="{{ gestion.name }}" 
+                                                           id="{{ gestion.id_for_label }}" 
+                                                           class="form-control" 
+                                                           value="{{ gestion.value|default_if_none:'' }}">
+                                                           
+                                                    {% if gestion.errors %}
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ gestion.errors }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                </div>`
+                                <!-- Sección de Procedencia -->
+                                <h3 class="mb-3">Procedencia</h3>
+                                <div class="form-row">
+                                    <div class="col-md-7">
+                                        <div class="form-row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="{{ responsable.id_for_label }}">Responsable:</label>
+                                                    <input type="{{ responsable.field.widget.input_type }}" 
+                                                           name="{{ responsable.name }}" 
+                                                           id="{{ responsable.id_for_label }}" 
+                                                           class="form-control" 
+                                                           value="{{ responsable.value|default_if_none:'' }}">
+                                                           
+                                                    {% if responsable.errors %}
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ responsable.errors }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>                                            
+                                            <div class="col-md-4">
+                                             <div class="form-group">
+                                                <label for="id_unidad">Unidad:</label>
+                                                <select id="id_unidad" name="unidad" class="form-control">
+                                                    <option value="">Seleccione una unidad</option>
+                                                    {% for unidad in unidades %}
+                                                        <option value="{{ unidad.id }}" data-secretaria="{{ unidad.nombre_secretaria.nombre_secretaria }}">
+                                                            {{ unidad.nombre_unidad }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>   
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary" type="submit">Subir Documento</button>
+                            </form>
                         </div>
-                        <div id="filePreview" class="mt-2" style="border: 1px solid #ddd; padding: 10px; display: none;">
-                            <img id="fileIcon" src="" alt="Ícono de archivo" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px; display: none;" />
-                            <span id="fileName"></span>
+                            
                         </div>
                     </div>
-                    <div class="form-group col-md-12">
-                        <label for="{{ detalles.id_for_label }}">Descripción:</label>
-                        {{ detalles }}
-                    </div>
                 </div>
 
-                <!-- Sección de Detalles -->
-                <h3>Detalles</h3>
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="{{ estado.id_for_label }}">Estado:</label>
-                        {{ estado }}
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="{{ numero_hojas.id_for_label }}">Número de Hojas:</label>
-                        {{ numero_hojas }}
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="{{ tipo_documentacion.id_for_label }}">Tomo:</label>
-                        {{ tipo_documentacion }}
-                    </div>
-                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        {% if messages %}
+                            // Mostrar modal si hay un mensaje de éxito
+                            $('#successModal').modal('show');
+                            setTimeout(function(){
+                                $('#successModal').modal('hide');
+                            }, 2000);  // 2 segundos de retraso
 
-                <!-- Sección de Ubicación -->
-                <h3>Ubicación</h3>
-                <div class="form-row">
-                    <div class="form-group col-md-3">
-                        <label for="{{ ambiente.id_for_label }}">Ambiente:</label>
-                        {{ ambiente }}
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="{{ estante.id_for_label }}">Estante:</label>
-                        {{ estante }}
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="{{ columna.id_for_label }}">Columna:</label>
-                        {{ columna }}
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="{{ balda.id_for_label }}">Balda:</label>
-                        {{ balda }}
-                    </div>
-                </div>
+                            // Limpiar el formulario
+                            document.getElementById("documentForm").reset();
+                            document.getElementById("fileLabel").textContent = "Seleccionar archivo...";
+                            document.getElementById("filePreview").style.display = "none";
+                        {% endif %}
+                    });
 
-                <!-- Sección de Comprobante -->
-                <h3>Comprobante</h3>
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="{{ tipo.id_for_label }}">Tipo:</label>
-                        {{ tipo }}
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="{{ numero.id_for_label }}">Número:</label>
-                        {{ numero }}
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="{{ gestion.id_for_label }}">Gestión:</label>
-                        {{ gestion }}
-                    </div>
-                </div>
+                    document.getElementById("{{ archivo.id_for_label }}").addEventListener("change", function(event) {
+                        const fileInput = event.target;
+                        const file = fileInput.files[0];
+                        const fileLabel = document.getElementById("fileLabel");
+                        const filePreview = document.getElementById("filePreview");
+                        const fileIcon = document.getElementById("fileIcon");
+                        const fileName = document.getElementById("fileName");
 
-                <!-- Sección de Procedencia -->
-                <h3>Procedencia</h3>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="{{ responsable.id_for_label }}">Responsable:</label>
-                        {{ responsable }}
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="id_secretaria">Secretaría:</label>
-                        <input type="text" id="id_secretaria" name="secretaria" readonly class="form-control">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <label for="id_unidad">Unidad:</label>
-                        <select id="id_unidad" name="unidad" class="form-control">
-                            <option value="">Seleccione una unidad</option>
-                            {% for unidad in unidades %}
-                                <option value="{{ unidad.id }}" data-secretaria="{{ unidad.nombre_secretaria.nombre_secretaria }}">
-                                    {{ unidad.nombre_unidad }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
+                        const iconMap = {
+                            'image': 'https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png',
+                            'application/pdf': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
+                            'application/msword': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
+                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
+                            'application/vnd.ms-excel': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
+                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
+                            'text/plain': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
+                        };
 
-                <button class="btn btn-secondary" type="submit">Subir Documento</button>
-            </form>
+                        if (file) {
+                            fileLabel.textContent = file.name;
+                            fileName.textContent = file.name;
+
+                            const fileType = file.type;
+                            let iconUrl = '';
+                            if (fileType.startsWith('image/')) {
+                                iconUrl = iconMap['image'];
+                            } else if (iconMap[fileType]) {
+                                iconUrl = iconMap[fileType];
+                            } else {
+                                iconUrl = 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg';
+                            }
+
+                            fileIcon.src = iconUrl;
+                            fileIcon.style.display = "inline";
+                            filePreview.style.display = "block";
+                        } else {
+                            fileLabel.textContent = "Seleccionar archivo...";
+                            filePreview.style.display = "none";
+                            fileIcon.style.display = "none";
+                        }
+                    });
+                </script>
+            </div>
         </div>
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        {% if messages %}
-            // Mostrar modal si hay un mensaje de éxito
-            $('#successModal').modal('show');
-            setTimeout(function(){
-                $('#successModal').modal('hide');
-            }, 2000);  // 2 segundos de retraso
-
-            // Limpiar el formulario
-            document.getElementById("documentForm").reset();
-            document.getElementById("fileLabel").textContent = "Seleccionar archivo...";
-            document.getElementById("filePreview").style.display = "none";
-        {% endif %}
-    });
-
-    document.getElementById("{{ archivo.id_for_label }}").addEventListener("change", function(event) {
-        const fileInput = event.target;
-        const file = fileInput.files[0];
-        const fileLabel = document.getElementById("fileLabel");
-        const filePreview = document.getElementById("filePreview");
-        const fileIcon = document.getElementById("fileIcon");
-        const fileName = document.getElementById("fileName");
-
-        const iconMap = {
-            'image': 'https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png',
-            'application/pdf': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
-            'application/msword': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
-            'application/vnd.ms-excel': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
-            'text/plain': 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg',
-        };
-
-        if (file) {
-            fileLabel.textContent = file.name;
-            fileName.textContent = file.name;
-
-            const fileType = file.type;
-            let iconUrl = '';
-            if (fileType.startsWith('image/')) {
-                iconUrl = iconMap['image'];
-            } else if (iconMap[fileType]) {
-                iconUrl = iconMap[fileType];
-            } else {
-                iconUrl = 'https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg';
-            }
-
-            fileIcon.src = iconUrl;
-            fileIcon.style.display = "inline";
-            filePreview.style.display = "block";
-        } else {
-            fileLabel.textContent = "Seleccionar archivo...";
-            filePreview.style.display = "none";
-            fileIcon.style.display = "none";
-        }
-    });
-</script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>

@@ -8,18 +8,21 @@
             <input type="text" id="search-input" name="query" placeholder="Buscar documentos..." autocomplete="off">
             <input type="text" name="comprobante" placeholder="Comprobante" style="display:none;">
             <input type="date" name="fecha_subida" style="display:none;">
-            <input type="number" name="anio" placeholder="Año" style="display:none;">
+            <input type="number" name="año" placeholder="Año" style="display:none;">
         </div>
         <button type="submit">Buscar</button>
     </form>
-    
     <div id="resultados">
     </div>
 </div>
 <script>
     document.getElementById('search-input').addEventListener('keyup', function() {
     const query = this.value;
-    fetch(`/userArchivoapp/buscar_documentos/?query=${query}`, {
+    const comprobante = document.querySelector('input[name="comprobante"]').value;
+    const fecha_subida = document.querySelector('input[name="fecha_subida"]').value;
+    const año = document.querySelector('input[name="año"]').value;
+    
+    fetch(`/userArchivoapp/buscar_documentos/?query=${query}&comprobante=${comprobante}&fecha_subida=${fecha_subida}&año=${año}`, {
         headers: { 'x-requested-with': 'XMLHttpRequest' }
     })
     .then(response => response.json())

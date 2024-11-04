@@ -92,7 +92,6 @@ body, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6, p, .navbar, .brand, 
 
 body, html {
   font-size: 14px;
-  background-color: red;
   color: #2A2F5B; }
   body {
     min-height: 100vh;
@@ -1615,7 +1614,7 @@ body[data-background-color="dark"] .border-top {
   border: 0px; }
   .card .card-header, .card-light .card-header {
     padding: 1rem 1.25rem;
-    background-color: #2A4F62;
+    background-color: #6DA5C0;
     border-bottom: 1px solid #ebecec !important; }
     .card .card-header:first-child, .card-light .card-header:first-child {
       border-radius: 0px; }

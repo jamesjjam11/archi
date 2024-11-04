@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model, update_session_auth_hash, login
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.views import LogoutView
+from django.contrib.auth.models import User
 from .forms import UserCreationForm, CustomUserCreationForm, SecretariaForm, UnidadForm, UsuarioCargoUnidadForm, PersonaForm, CargoForm
 from .models import Persona, Secretaria, Unidad, Cargo, UsuarioCargoUnidad, User, Bitacora
 from django.http import JsonResponse, HttpResponse, HttpResponseNotAllowed, FileResponse
@@ -41,11 +42,24 @@ class LogoutView(LogoutView):
 @login_required
 def index(request):
     user_roles = request.user.groups.values_list('name', flat=True)
+    imagen_url = None  # Inicializamos como None
+
+    try:
+        # Intenta obtener la instancia de Persona
+        persona = Persona.objects.get(user=request.user)
+        if persona.image:  # Verifica si hay una imagen asociada
+            imagen_url = persona.image.url
+    except Persona.DoesNotExist:
+        # Manejo si la Persona no existe
+        imagen_url = None  # O usar una imagen por defecto
+    except Exception as e:
+        print(f"Error al acceder a la imagen: {e}")  # Captura cualquier otro error
+
     context = {
         'user_roles': user_roles,
+        'imagen_url': imagen_url,  # Pasamos la URL de la imagen al contexto
     }
     return render(request, 'user/index.html', context)
-
 @never_cache
 @login_required
 def register_user(request):

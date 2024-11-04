@@ -24,7 +24,6 @@ from django.utils import timezone
 from datetime import timedelta
 
 
-
 def comprimir_archivo(archivo):
     if archivo.name.endswith(('.jpg', '.jpeg', '.png')):
         # Comprimir imágenes
@@ -66,7 +65,7 @@ def comprimir_archivo(archivo):
         return InMemoryUploadedFile(output, 'FileField', archivo.name, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', len(output.getvalue()), None)
 
     return archivo
-
+@never_cache
 @login_required
 def subir_documento(request):
     form = DocumentoForm()
@@ -74,8 +73,7 @@ def subir_documento(request):
         form = DocumentoForm(request.POST, request.FILES)
         if form.is_valid():
             documento = form.save(commit=False)
-            documento.usuario = request.user  # Asignar el usuario que subió el documento
-            
+            documento.usuario = request.user  # Asignar el usuario que subió el documento          
             # Convertir todos los campos relevantes a mayúsculas
             documento.nombre_archivo = form.cleaned_data['nombre_archivo'].upper()
             documento.detalles = form.cleaned_data['detalles'].upper()
@@ -125,7 +123,6 @@ def subir_documento(request):
     }
     
     return render(request, 'subir_documento.html', context)
-
 
 def get_unidades(request, secretaria_id):
     unidades = Unidad.objects.filter(nombre_secretaria_id=secretaria_id)
@@ -265,7 +262,6 @@ def buscar_documentos(request):
         return JsonResponse({'html': html})
 
     return render(request, 'buscar_documentos.html', {'resultados': resultados})
-
 @never_cache
 @login_required
 def reporte_documento(request, documento_id):   
@@ -276,7 +272,6 @@ def reporte_documento(request, documento_id):
     context = {
         'documento': documento
     }
-    
     # Renderizar la plantilla del reporte
     return render(request, 'reporte_documento.html', context)
 
