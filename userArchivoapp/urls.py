@@ -9,7 +9,7 @@ urlpatterns = [
     path('subir_documento/', views.subir_documento, name='subir_documento'),
     path('get_unidades/<int:secretaria_id>/', views.get_unidades, name='get_unidades'),
     path('lista-archivos/', views.lista_archivos, name='lista_archivos'),
-    path('documento/<int:documento_id>/vista_previa/', views.vista_previa_documento, name='vista_previa_documento'),
+    path('vista_previa_documento/<int:documento_id>/', views.vista_previa_documento, name='vista_previa_documento'),
     path('solicitudes/', views.lista_solicitudes, name='lista_solicitudes'),
     path('solicitudes/<int:solicitud_id>/', views.gestionar_solicitud, name='gestionar_solicitud'),
     path('prestamos/pendientes/', views.lista_prestamos_pendientes, name='lista_prestamos_pendientes'),
@@ -19,6 +19,7 @@ urlpatterns = [
     path('reportes/', views.lista_reportes, name='lista_reportes'),
     path('descargar-reporte/<int:documento_id>/', views.descargar_reporte, name='descargar_reporte'),
     path('descargar_documento/<int:documento_id>/', views.descargar_documento, name='descargar_documento'),
+    
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

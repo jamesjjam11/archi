@@ -96,7 +96,6 @@ body, html {
   body {
     min-height: 100vh;
     position: relative;
-    
     background-size: cover;
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -366,7 +365,13 @@ label {
   min-height: 100%;
   float: right;
   background-color: #0E9097;
+  background-image: url(/static/img/ESCUDO\ TEXTO\ BLANCO\ VERTICAL\ \(1\).png);
+  background-repeat: no-repeat;
+  background-size: 570px 200px;
+  background-position: center center;
+  background-attachment: fixed;
   transition: all .3s; }
+
   .main-panel > .container {
     min-height: calc(100% - 123px);
     margin-top: 69px;

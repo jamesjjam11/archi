@@ -27,6 +27,7 @@
                     <td>{{ documento.unidad.nombre_unidad }}</td>
                     <td>
                         <a href="{% url 'descargar_documento' documento.id %}" class="btn btn-primary btn-sm">Descargar</a>
+                        <a href="{{ documento.archivo.url }}" class="btn btn-secondary" target="_blank">Vista Previa</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -39,4 +40,8 @@
         </tbody>
     </table>
 </div>
+<script>
+    window.open("{{ documento.archivo.url }}", "_blank");
+</script>
+
 {% endblock %}

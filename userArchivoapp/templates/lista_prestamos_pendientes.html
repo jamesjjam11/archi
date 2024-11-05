@@ -2,15 +2,43 @@
 {% block content %}
 <br><br><br>
 <div class="container">
-    <!-- Pestañas para las devoluciones -->
-    <ul class="nav nav-tabs" id="devolucionTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="pendientes-tab" data-toggle="tab" href="#pendientes" role="tab" aria-controls="pendientes" aria-selected="true">Pendientes</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="devueltas-tab" data-toggle="tab" href="#devueltas" role="tab" aria-controls="devueltas" aria-selected="false">Devueltas</a>
-        </li>
-    </ul>
+    <!-- Estilos personalizados -->
+<style>
+    .nav-tabs {
+        border-bottom: 2px solid #007bff;
+    }
+    .nav-item .nav-link {
+        color: #007bff;
+        font-weight: bold;
+        padding: 12px 20px;
+        margin-right: 5px;
+        border: 1px solid transparent;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    .nav-item .nav-link:hover {
+        background-color: #e9f7ff;
+        color: #0056b3;
+        border-color: #007bff;
+    }
+    .nav-item .nav-link.active {
+        background-color: #007bff;
+        color: #fff;
+        border-color: #007bff;
+    }
+</style>
+
+<!-- Pestañas para las devoluciones -->
+<ul class="nav nav-tabs" id="devolucionTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="pendientes-tab" data-toggle="tab" href="#pendientes" role="tab" aria-controls="pendientes" aria-selected="true">Pendientes</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="devueltas-tab" data-toggle="tab" href="#devueltas" role="tab" aria-controls="devueltas" aria-selected="false">Devueltas</a>
+    </li>
+</ul>
+
 
     <!-- Contenido de las pestañas -->
     <div class="tab-content" id="devolucionTabsContent">

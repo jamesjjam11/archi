@@ -21,6 +21,8 @@ from collections import defaultdict
 from itertools import groupby
 from operator import attrgetter
 from django.utils import timezone
+from django.db.models import F
+from django.conf import settings
 from datetime import timedelta
 
 
@@ -165,14 +167,18 @@ def lista_archivos(request):
 
     return render(request, 'list_doc.html', context)
 
+@login_required
+@never_cache
 def vista_previa_documento(request, documento_id):
     documento = get_object_or_404(Documento, id=documento_id)
-    
+    es_pdf = documento.archivo.url.lower().endswith(".pdf")
+    archivo_url = request.build_absolute_uri(documento.archivo.url)
     context = {
-        'documento': documento
+        'documento': documento,
+        'es_pdf': es_pdf,
+        'archivo_url': archivo_url,
     }
-    
-    return render(request, 'vista_previa.html', context)
+    return render(request, 'vista_previa_documento.html', context)
 
 @never_cache
 @login_required

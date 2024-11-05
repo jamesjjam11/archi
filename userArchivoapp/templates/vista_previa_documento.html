@@ -1,0 +1,67 @@
+{% extends 'user/index.html' %}
+{% block content %}
+
+<style>
+    .preview-container {
+        max-width: 900px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .header {
+        background-color: #f5f5f5;
+        padding: 20px;
+        text-align: center;
+        border: 1px solid #ddd;
+        margin-bottom: 20px;
+    }
+    .header h1 {
+        font-size: 24px;
+        color: #333;
+        margin: 0;
+    }
+    .header p {
+        font-size: 18px;
+        color: #666;
+    }
+    .document-container {
+        border: 2px solid #ddd;
+        padding: 10px;
+        background-color: #ffffff;
+    }
+    .document-preview {
+        width: 100%;
+        height: 600px;
+    }
+    .footer {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #999;
+    }
+</style>
+<br><br><br>
+<div class="preview-container">
+    <!-- Encabezado -->
+    <div class="header">
+        <h1>Gobierno Autónomo Departamental de Potosí</h1>
+        <p>Previsualización del Documento</p>
+        <p>URL del archivo: {{ documento.archivo.url }}</p>
+
+    </div>
+
+    <!-- Contenedor del documento -->
+    <div class="document-container">
+        {% if es_pdf %}
+            <embed src="{{ archivo_url }}" class="document-preview" type="application/pdf">
+        {% else %}
+            <img src="{{ archivo_url }}" class="document-preview" alt="Vista previa del documento">
+        {% endif %}
+    </div>
+
+    <!-- Pie de página con detalles -->
+    <div class="footer">
+        <p>Documento emitido por: {{ documento.autor.nombre }}</p>
+        <p>Fecha de emisión: {{ documento.fecha_emision|date:"d-m-Y" }}</p>
+    </div>
+</div>
+
+{% endblock %}
