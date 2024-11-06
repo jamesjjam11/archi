@@ -19,6 +19,8 @@ urlpatterns = [
     path('reportes/', views.lista_reportes, name='lista_reportes'),
     path('descargar-reporte/<int:documento_id>/', views.descargar_reporte, name='descargar_reporte'),
     path('descargar_documento/<int:documento_id>/', views.descargar_documento, name='descargar_documento'),
+    path('gestionar-gestion/', views.gestionar_gestion, name='gestionar_gestion'),
+    path('cerrar-gestion/<int:gestion_id>/', views.cerrar_gestion, name='cerrar_gestion'),
     
 ]
 if settings.DEBUG:

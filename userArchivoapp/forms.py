@@ -1,5 +1,5 @@
 from django import forms
-from .models import Documento, Prestamo
+from .models import Documento, Prestamo, Gestion
 from webapp.models import Secretaria, Unidad
 from userPersonal.models import SolicitudPrestamo
 
@@ -13,6 +13,13 @@ class DocumentoForm(forms.ModelForm):
             'balda', 'detalles', 'responsable', 'secretaria', 'unidad',
             'tipo', 'numero', 'gestion',
         ]
+        def clean_gestion(self):
+            gestion = self.cleaned_data['gestion']
+            try:
+                gestion_activa = Gestion.objects.get(año=gestion, abierta=True)
+            except Gestion.DoesNotExist:
+                raise forms.ValidationError("No es posible registrar documentos para la gestión seleccionada.")
+            return gestion
         widgets = {
             'estado': forms.Select(choices=[
                 ('optimo', 'OPTIMO'),

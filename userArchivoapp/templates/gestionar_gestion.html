@@ -1,0 +1,30 @@
+{% extends "user/index.html" %}
+
+{% block content %}
+<br><br><br>
+<h2>Gestionar Gestión</h2>
+<div class="col-md-6">
+    <div class="form-group">
+        <form method="POST">
+                {% csrf_token %}
+                <label for="año" style="font-family: Arial, Helvetica, sans-serif;">Año de Gestión:</label>
+                <input type="text" id="año" name="año" maxlength="4" required>
+                <button type="submit" class="btn btn-success">Abrir Gestión</button>
+            </form>
+
+            <h3 class="mb-3">Historial de Gestiones</h3>
+            <ul style="color: white; font-family: Arial, Helvetica, sans-serif;">
+                {% for gestion in gestiones %}
+                    <li>
+                        {{ gestion.año }} - {% if gestion.abierta %}Abierta{% else %}Cerrada{% endif %}
+                        {% if gestion.abierta %}
+                            <a class="btn btn-warning" href="{% url 'cerrar_gestion' gestion.id %}">Cerrar Gestión</a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+    </div>
+    
+</div>
+
+{% endblock %}

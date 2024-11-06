@@ -239,6 +239,12 @@
              {% endif %} 
               {% if 'SuperAdmin' in request.user_roles %}
               <li class="nav-item">
+                <a href="{% url 'gestionar_gestion' %}">
+                  <i class="fas fa-clipboard-list"></i>
+                  <p>gestion</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <form method="POST" action="{% url 'backup_database' %}" id="backup-form">
                   {% csrf_token %}
                   <button type="submit" class="btn btn-primary">

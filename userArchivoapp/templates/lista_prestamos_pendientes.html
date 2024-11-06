@@ -3,42 +3,59 @@
 <br><br><br>
 <div class="container">
     <!-- Estilos personalizados -->
-<style>
-    .nav-tabs {
-        border-bottom: 2px solid #007bff;
-    }
-    .nav-item .nav-link {
-        color: #007bff;
-        font-weight: bold;
-        padding: 12px 20px;
-        margin-right: 5px;
-        border: 1px solid transparent;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        transition: all 0.3s ease;
-    }
-    .nav-item .nav-link:hover {
-        background-color: #e9f7ff;
-        color: #0056b3;
-        border-color: #007bff;
-    }
-    .nav-item .nav-link.active {
-        background-color: #007bff;
-        color: #fff;
-        border-color: #007bff;
-    }
-</style>
+    <style>
+        /* Estilos para las pestañas */
+        .nav-tabs {
+            border-bottom: 2px solid #6DA5C0;
+        }
+        .nav-item .nav-link {
+            color: #0E9097;
+            font-weight: bold;
+            padding: 12px 20px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .nav-item .nav-link:hover,
+        .nav-item .nav-link.active {
+            background-color: #6DA5C0;
+            color: white;
+        }
 
-<!-- Pestañas para las devoluciones -->
-<ul class="nav nav-tabs" id="devolucionTabs" role="tablist">
-    <li class="nav-item" role="presentation">
-        <a class="nav-link active" id="pendientes-tab" data-toggle="tab" href="#pendientes" role="tab" aria-controls="pendientes" aria-selected="true">Pendientes</a>
-    </li>
-    <li class="nav-item" role="presentation">
-        <a class="nav-link" id="devueltas-tab" data-toggle="tab" href="#devueltas" role="tab" aria-controls="devueltas" aria-selected="false">Devueltas</a>
-    </li>
-</ul>
+        /* Estilos para las tablas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        thead {
+            background-color: #0E9097;
+            color: white;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #6DA5C0;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #6DA5C0;
+            color: white;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #0E9097;
+            color: white;
+        }
+    </style>
 
+    <!-- Pestañas para las devoluciones -->
+    <ul class="nav nav-tabs" id="devolucionTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="pendientes-tab" data-toggle="tab" href="#pendientes" role="tab" aria-controls="pendientes" aria-selected="true">Pendientes</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="devueltas-tab" data-toggle="tab" href="#devueltas" role="tab" aria-controls="devueltas" aria-selected="false">Devueltas</a>
+        </li>
+    </ul>
 
     <!-- Contenido de las pestañas -->
     <div class="tab-content" id="devolucionTabsContent">
@@ -61,7 +78,7 @@
                         <td>{{ prestamo.usuario_prestamo }}</td>
                         <td>{{ prestamo.fecha_prestamo }}</td>
                         <td>
-                            <button class="btn btn-primary open-modal" data-url="{% url 'registrar_devolucion_modal' prestamo.id %}">Registrar Devolución</button>
+                            <button class="btn btn-success open-modal" data-url="{% url 'registrar_devolucion_modal' prestamo.id %}">Registrar Devolución</button>
                         </td>
                     </tr>
                     {% empty %}
@@ -103,54 +120,4 @@
         </div>
     </div>
 </div>
-
-<!-- Modal HTML para registrar devoluciones (sin cambios) -->
-<div class="modal fade" id="devolucionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Registrar Devolución</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="modal-body-content">
-                <!-- El contenido del formulario de devolución será cargado aquí mediante AJAX -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="submit-devolucion-form">Registrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Scripts para AJAX (sin cambios) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        // Abrir el modal y cargar el formulario
-        $('.open-modal').on('click', function() {
-            var url = $(this).data('url');
-            $.get(url, function(data) {
-                $('#modal-body-content').html(data);  // Cargar el contenido del formulario en el modal
-                $('#devolucionModal').modal('show');  // Mostrar el modal
-            });
-        });
-
-        // Manejar el envío del formulario dentro del modal
-        $('#submit-devolucion-form').on('click', function() {
-            var form = $('#modal-body-content').find('form');
-            $.post(form.attr('action'), form.serialize(), function(response) {
-                if (response.success) {
-                    $('#devolucionModal').modal('hide');  // Cerrar el modal al registrar correctamente
-                    location.reload();  // Recargar la página para mostrar los cambios
-                } else {
-                    $('#modal-body-content').html(response.html);  // Si hay errores, los volvemos a mostrar en el modal
-                }
-            });
-        });
-    });
-</script>
-
 {% endblock %}

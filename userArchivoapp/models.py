@@ -81,3 +81,10 @@ class Prestamo(models.Model):
 
     def __str__(self):
         return f'{self.documento} prestado a {self.usuario_prestamo}'    
+
+class Gestion(models.Model):
+    año = models.CharField(max_length=4, unique=True)
+    abierta = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.año} - {'Abierta' if self.abierta else 'Cerrada'}"

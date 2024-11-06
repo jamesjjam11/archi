@@ -9,7 +9,7 @@ from userPersonal.models import SolicitudPrestamo
 from PIL import Image
 from django.http import JsonResponse, HttpResponse, FileResponse
 import os, io
-from .models import Documento, Prestamo
+from .models import Documento, Prestamo, Gestion
 from PyPDF2 import PdfReader, PdfWriter
 import zipfile
 from docx import Document
@@ -67,13 +67,16 @@ def comprimir_archivo(archivo):
         return InMemoryUploadedFile(output, 'FileField', archivo.name, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', len(output.getvalue()), None)
 
     return archivo
+
 @never_cache
 @login_required
 def subir_documento(request):
+    gestion_abierta = Gestion.objects.filter(abierta=True).first()  # Obtener la gestión abierta
     form = DocumentoForm()
+    
     if request.method == 'POST':
         form = DocumentoForm(request.POST, request.FILES)
-        if form.is_valid():
+        if form.is_valid() and gestion_abierta:  # Asegurarse de que hay una gestión abierta
             documento = form.save(commit=False)
             documento.usuario = request.user  # Asignar el usuario que subió el documento          
             # Convertir todos los campos relevantes a mayúsculas
@@ -88,7 +91,8 @@ def subir_documento(request):
             documento.balda = form.cleaned_data['balda'].upper()
             documento.tipo = form.cleaned_data['tipo'].upper()
             documento.numero = form.cleaned_data['numero']  # Suponiendo que este es un número
-            documento.gestion = form.cleaned_data['gestion'].upper()
+            
+            documento.gestion = gestion_abierta.año  # Asigna el año de la gestión abierta
             documento.responsable = form.cleaned_data['responsable'].upper()
             
             archivo = request.FILES.get('archivo')
@@ -120,7 +124,7 @@ def subir_documento(request):
         'detalles': form['detalles'],
         'tipo': form['tipo'],
         'numero': form['numero'],
-        'gestion': form['gestion'],
+        'gestion': gestion_abierta.año if gestion_abierta else None,  # Usar el año de la gestión abierta
         'responsable': form['responsable'],
     }
     
@@ -353,3 +357,21 @@ def descargar_documento(request, documento_id):
     response['Content-Disposition'] = f'attachment; filename="{documento.nombre_archivo}"'
 
     return response
+@never_cache
+@login_required
+def gestionar_gestion(request):
+    if request.method == 'POST':
+        año = request.POST.get('año')
+        Gestion.objects.update(abierta=False)  # Cierra cualquier gestión anterior
+        gestion, created = Gestion.objects.get_or_create(año=año)
+        gestion.abierta = True
+        gestion.save()
+        return redirect('gestionar_gestion')
+
+    gestiones = Gestion.objects.all()
+    return render(request, 'gestionar_gestion.html', {'gestiones': gestiones})
+def cerrar_gestion(request, gestion_id):
+    gestion = get_object_or_404(Gestion, id=gestion_id)
+    gestion.abierta = False
+    gestion.save()
+    return redirect('gestionar_gestion')

@@ -2,16 +2,75 @@
 {% block content %}
 <br><br><br>
 <div class="container">
+    <!-- Estilos adicionales para mejorar las pestañas -->
+    <style>
+        .nav-tabs .nav-link {
+            border-radius: 0;
+            color: white;
+            font-weight: 600;
+            padding: 12px 20px;
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: #fff;
+            background-color: #6DA5C0;
+            border: none;
+        }
+        
+        .nav-tabs .nav-link:hover {
+            color: #FFBB00;
+        }
+        
+        .tab-pane {
+            background: #6DA5C0;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.3s ease;
+        }
+        
+        .tab-pane h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .tab-pane ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .tab-pane li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab-pane li:last-child {
+            border-bottom: none;
+        }
+        
+        .tab-pane a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .tab-pane a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
     <!-- Pestañas para las solicitudes -->
-    <ul class="nav nav-tabs" id="solicitudTabs" role="tablist">
+    <ul class="nav nav-tabs mb-4" id="solicitudTabs" role="tablist">
         <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="pendientes-tab" data-toggle="tab" href="#pendientes" role="tab" aria-controls="pendientes" aria-selected="true">Pendientes</a>
+            <a class="nav-link active" id="pendientes-tab" data-bs-toggle="tab" href="#pendientes" role="tab" aria-controls="pendientes" aria-selected="true">Pendientes</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" id="aprobadas-tab" data-toggle="tab" href="#aprobadas" role="tab" aria-controls="aprobadas" aria-selected="false">Aprobadas</a>
+            <a class="nav-link" id="aprobadas-tab" data-bs-toggle="tab" href="#aprobadas" role="tab" aria-controls="aprobadas" aria-selected="false">Aprobadas</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" id="rechazadas-tab" data-toggle="tab" href="#rechazadas" role="tab" aria-controls="rechazadas" aria-selected="false">Rechazadas</a>
+            <a class="nav-link" id="rechazadas-tab" data-bs-toggle="tab" href="#rechazadas" role="tab" aria-controls="rechazadas" aria-selected="false">Rechazadas</a>
         </li>
     </ul>
 

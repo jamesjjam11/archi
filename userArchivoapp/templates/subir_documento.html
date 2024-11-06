@@ -254,17 +254,11 @@
                                             <!-- Campo Gestión -->
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="{{ gestion.id_for_label }}">Gestión:</label>
-                                                    <input type="{{ gestion.field.widget.input_type }}" 
-                                                           name="{{ gestion.name }}" 
-                                                           id="{{ gestion.id_for_label }}" 
-                                                           class="form-control" 
-                                                           value="{{ gestion.value|default_if_none:'' }}">
-                                                           
-                                                    {% if gestion.errors %}
-                                                        <div class="invalid-feedback d-block">
-                                                            {{ gestion.errors }}
-                                                        </div>
+                                                    <label for="gestion">Gestión:</label>
+                                                    {% if gestion %}
+                                                        <input type="text" name="gestion" id="gestion" class="form-control" value="{{ gestion }}" readonly>
+                                                    {% else %}
+                                                        <p class="text-danger">No hay una gestión abierta actualmente. No se puede registrar el documento.</p>
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -308,7 +302,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button class="btn btn-secondary" type="submit">Subir Documento</button>
+                                <button class="btn btn-secondary" type="submit" {% if not gestion %}disabled{% endif %}>Subir Documento</button>
                             </form>
                         </div>
                             
