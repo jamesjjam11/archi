@@ -3,9 +3,9 @@
 <br>
 <div class="container mt-4">
     <div class="page-inner">
-        <h3 class="text-center mb-4">Detalle del Usuario</h3>
-        <div class="card">
-            <div class="card-body">
+        <h3 class="text-center mb-4" style="color: white;">Detalle del Usuario</h3>
+        <div class="card" style="background-color: #6DA5C0;">
+            <div class="card-body" style="background-color: #6DA5C0;" >
                 <div class="row">
                     <div class="col-md-4 text-center">
                         <div class="img-thumbnail" style="width: 300px; height: 300px; overflow: hidden;">
@@ -17,56 +17,57 @@
                         </div>
                     </div>
                     <div class="col-md-8">
-                        <h4 class="card-title">Datos Personales</h4>
+                        <h4 class="card-title" style="color: #082E33;">Datos Personales</h4>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <p><strong>Nombre:</strong> {{ persona.nombre }}</p>
+                                <p style="color: white;"><strong>Nombre:</strong> {{ persona.nombre }}</p>
                             </div>
                             <div class="col-md-6">
-                                <p><strong>Apellido Paterno:</strong> {{ persona.apellido_paterno }}</p>
+                                <p style="color: white;"><strong>Apellido Paterno:</strong> {{ persona.apellido_paterno }}</p>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <p><strong>Apellido Materno:</strong> {{ persona.apellido_materno }}</p>
+                                <p style="color: white;"><strong>Apellido Materno:</strong> {{ persona.apellido_materno }}</p>
                             </div>
                             <div class="col-md-6">
-                                <p><strong>CI:</strong> {{ persona.ci }}</p>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <p><strong>Username:</strong> {{ user.username }}</p>
-                            </div>
-                            <div class="col-md-6">
-                                <p><strong>Email:</strong> {{ user.email }}</p>
+                                <p style="color: white;"><strong>CI:</strong> {{ persona.ci }}</p>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <p><strong>Rol:</strong> 
+                                <p style="color: white;"><strong>Username:</strong> {{ user.username }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p style="color: white;"><strong>Email:</strong> {{ user.email }}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p style="color: white;"><strong>Rol:</strong> 
                                     {% for group in user.groups.all %}
                                     {{ group.name }}{% if not forloop.last %}, {% endif %}
-                                    {% endfor %}</p>
+                                    {% endfor %}
+                                </p>
                             </div>
                         </div>
-                        <h4 class="card-title">Datos del Cargo</h4>
+                        <h4 class="card-title" style="color: #082E33;">Datos del Cargo</h4>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <p><strong>Cargo:</strong> {{ usuario_cargo_unidad.nombre_cargo.nombre_cargo }}</p>
+                                <p style="color: white;"><strong>Cargo:</strong> {{ usuario_cargo_unidad.nombre_cargo.nombre_cargo }}</p>
                             </div>
                             <div class="col-md-6">
-                                <p><strong>Unidad:</strong> {{ usuario_cargo_unidad.nombre_unidad.nombre_unidad }}</p>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <p><strong>Secretaría:</strong> {{ usuario_cargo_unidad.nombre_unidad.nombre_secretaria.nombre_secretaria }}</p>
+                                <p style="color: white;"><strong>Unidad:</strong> {{ usuario_cargo_unidad.nombre_unidad.nombre_unidad }}</p>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <p><strong>Fecha de Registro:</strong> {{ usuario_cargo_unidad.fecha_inicio }}</p>
+                                <p style="color: white;"><strong>Secretaría:</strong> {{ usuario_cargo_unidad.nombre_unidad.nombre_secretaria.nombre_secretaria }}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p style="color: white;"><strong>Fecha de Registro:</strong> {{ usuario_cargo_unidad.fecha_inicio }}</p>
                             </div>
                         </div>
                         <a class="btn btn-success" href="{% url 'listUser' %}">Atras</a>

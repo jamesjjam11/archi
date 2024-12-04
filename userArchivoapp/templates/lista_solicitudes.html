@@ -59,6 +59,12 @@
         .tab-pane a:hover {
             text-decoration: underline;
         }
+        .btn-secondary2 {
+            background-color: #171a4a;
+            border-color: greenyellow;
+            color: white;
+        }
+        
     </style>
 
     <!-- Pestañas para las solicitudes -->
@@ -69,9 +75,9 @@
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="aprobadas-tab" data-bs-toggle="tab" href="#aprobadas" role="tab" aria-controls="aprobadas" aria-selected="false">Aprobadas</a>
         </li>
-        <li class="nav-item" role="presentation">
+        <!--<li class="nav-item" role="presentation">
             <a class="nav-link" id="rechazadas-tab" data-bs-toggle="tab" href="#rechazadas" role="tab" aria-controls="rechazadas" aria-selected="false">Rechazadas</a>
-        </li>
+        </li>-->
     </ul>
 
     <!-- Contenido de las pestañas -->
@@ -82,8 +88,8 @@
             <ul>
                 {% for solicitud in solicitudes_pendientes %}
                 <li>
-                    {{ solicitud.usuario_prestamo }} solicitó {{ solicitud.documento }}
-                    - <a href="{% url 'gestionar_solicitud' solicitud.id %}">Gestionar</a>
+                    {{ solicitud.usuario }} solicitó {{ solicitud.documento }}
+                    - <a class="btn btn-secondary2" href="{% url 'gestionar_solicitud' solicitud.id %}">Gestionar</a>
                 </li>
                 {% empty %}
                 <li>No hay solicitudes pendientes.</li>

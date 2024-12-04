@@ -1,8 +1,92 @@
 {% extends 'user/index.html' %}
 {% block content %}
 <br><br>
+<style>
+    /* Estilo para el contenedor de la tabla */
+    .table-container {
+        margin: 20px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* Encabezado de la tabla */
+    .table thead {
+        background-color: #2A4F62;
+        color: white;
+
+    }
+
+    /* Estilo de la tabla */
+    .table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .table th {
+        color: white;  /* Color de texto blanco en los encabezados */
+        font-weight: bold;
+    }
+    .table td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    /* Colores de fila */
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #6DA5C0; /* Color de fondo para filas impares */
+    }
+
+    .table-striped tbody tr:nth-of-type(even) {
+        background-color: #6DA5C0; /* Color de fondo para filas pares */
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #4B8692; /* Color de fondo al hacer hover */
+    }
+
+    /* Estilo para los botones de acciones */
+    .btn {
+        padding: 6px 12px;
+        margin: 2px;
+        color: white;
+        font-size: 14px;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    /* Paginación */
+    .pagination .page-link {
+        color: #0d1237;
+        border-color: #ddd;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #6DA5C0;
+        border-color: #6DA5C0;
+        color: white;
+    }
+
+    .pagination .page-link:hover {
+        background-color: #0E9097;
+        color: white;
+    }
+</style>
+
 <div class="card-body">
-        <div class="container mt-4">
+    <div class="container mt-4">
         <div class="table-responsive-lg">
             <br>
             <h3 class="text-center mb-2">Lista de usuarios</h3>
@@ -13,14 +97,14 @@
                             <div class="input-group">
                                 <input type="text" name="q" class="form-control" placeholder="Buscar usuario..." value="{{ query }}">
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                                    <button class="btn btn-success" type="submit">Buscar</button>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
-                <table class="table table-hover table-striped table-bordered">
-                    <thead class="thead-dark">
+                <table class="table table-hover table-striped table-bordered" style=" font-family: Arial, Helvetica, sans-serif;">
+                    <thead>
                         <tr>
                             <th scope="col">Usuario</th>
                             <th scope="col">Nombre</th>
@@ -32,7 +116,6 @@
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
                         {% for usuario in usuarios %}
                         <tr class="small">
                             <td scope="row">{{ usuario.username }}</td>

@@ -18,9 +18,13 @@ import logging, os, subprocess, datetime, shutil
 from pathlib import Path
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseNotFound
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 User = get_user_model()
+
+def custom_404(request, exception):
+    return render(request, '404.html', status=404)
 
 def home(request):
     if request.method == 'POST':
@@ -266,6 +270,7 @@ def edit_user(request, user_id):
         'user_id': user.id,
     }
     return render(request, 'user/editUser.html', context)
+
 @login_required
 def dar_de_baja_usuario(request, user_id):
     user = get_object_or_404(User, id=user_id)
@@ -289,7 +294,7 @@ def dar_de_baja_usuario(request, user_id):
 @login_required
 def list_bitacora(request):
     bitacora_list = Bitacora.objects.all().order_by('-timestamp')
-    paginator = Paginator(bitacora_list, 10)  # Cambia 10 al número de registros que deseas por página
+    paginator = Paginator(bitacora_list, 7)  # Cambia 10 al número de registros que deseas por página
     page_number = request.GET.get('page')
     bitacora = paginator.get_page(page_number)
     return render(request, 'user/listBitacora.html', {'bitacora': bitacora})

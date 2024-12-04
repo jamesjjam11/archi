@@ -1,68 +1,98 @@
 {% extends 'user/index.html' %}
 {% block content %}
 <br><br>
-    <div class="container mt-4">
-        <h3 class="text-center mb-4">Monitoreo Sistema</h3>
+<style>
+    /* Estilo general */
+    body {
+        background-color: #2A4F62; /* Fondo del contenido */
+        color: white; /* Texto blanco por defecto */
+    }
 
-        <!-- Mostrar los usuarios en línea -->
-        <h4>Usuarios en línea: {{ total_users_online }}</h4>
-        <ul>
-            {% for user in users_online %}
-                <li>{{ user.username }}</li>
-            {% endfor %}
-        </ul>
+    /* Título principal */
+    h3 {
+        color: white;
+        font-weight: bold;
+    }
 
-        <!-- Mostrar los grupos y usuarios en línea por grupo -->
-        <h4>Grupos y Usuarios Registrados</h4>
-        <table class="table">
-            <thead>
+    /* Títulos secundarios */
+    h4 {
+        color: white;
+        font-weight: bold;
+    }
+
+    /* Íconos en la lista */
+    .user-icon {
+        color: gold;
+        margin-right: 5px;
+    }
+
+    /* Tabla de grupos */
+    .table {
+        background-color: #6DA5C0;
+        color: white;
+        border-color: #0E9097;
+    }
+
+    .table thead {
+        background-color: #2A4F62;
+        color: white;
+    }
+
+    .table th, .table td {
+        text-align: center;
+        border: 1px solid #0E9097;
+        color: white;
+    }
+
+    /* Lista de usuarios */
+    ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    li {
+        margin-bottom: 5px;
+    }
+</style>
+
+<div class="container mt-4">
+    <h3 class="text-center mb-4">Monitoreo Sistema</h3>
+
+    <!-- Mostrar los usuarios en línea -->
+    <h4>
+        <i class="fa fa-user user-icon"></i> Usuarios en línea: {{ total_users_online }}
+    </h4>
+    <ul>
+        {% for user in users_online %}
+            <li>
+                <i class="fa fa-user-circle user-icon"></i> {{ user.username }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Mostrar los grupos y usuarios en línea por grupo -->
+    <h4>Grupos y Usuarios Registrados</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Grupo</th>
+                <th>Usuarios Registrados</th>
+                <th>Usuarios en Línea</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for grupo in grupos_con_usuarios_online %}
                 <tr>
-                    <th>Grupo</th>
-                    <th>Usuarios Registrados</th>
-                    <th>Usuarios en Línea</th>
+                    <td>{{ grupo.group.name }}</td>
+                    <td>{{ grupo.total_users }}</td>
+                    <td>{{ grupo.users_online }}</td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for grupo in grupos_con_usuarios_online %}
-                    <tr>
-                        <td>{{ grupo.group.name }}</td>
-                        <td>{{ grupo.total_users }}</td>
-                        <td>{{ grupo.users_online }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
-        <!-- Canvas para el gráfico de usuarios por mes -->
-        <div class="mt-4">
-            <canvas id="usersChart"></canvas>
-        </div>
+<!-- Agregar el enlace a Font Awesome para los íconos -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const ctx = document.getElementById('usersChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: {{ months|safe }}, 
-                        datasets: [{
-                            label: 'Usuarios por Mes',
-                            data: {{ counts|safe }},
-                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            });
-        </script>
-    </div>
 {% endblock content %}

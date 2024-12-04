@@ -1,7 +1,71 @@
 {% extends 'user/index.html' %}
 {% block content %}
-<br><br>
-<div class="card">
+<style>
+    /* Contenedor de la tabla */
+    .card {
+        margin: 20px;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+    }
+
+    /* Encabezado de la tabla */
+    .table thead {
+        background-color: #0E9097;  /* Fondo para el encabezado */
+    }
+
+    .table th {
+        color: white;  /* Color de texto blanco en los encabezados */
+        font-weight: bold;
+    }
+
+    /* Filas de la tabla */
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #6DA5C0;  /* Fondo para las filas impares */
+    }
+
+    .table-striped tbody tr:nth-of-type(even) {
+        background-color: #6DA5C0;  /* Fondo para las filas pares */
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #4B8692;  /* Fondo al hacer hover sobre una fila */
+    }
+
+    /* Estilo para las celdas */
+    .table td, .table th {
+        text-align: center;
+        padding: 12px;
+    }
+
+    /* Paginación */
+    .pagination {
+        margin-top: 20px;
+        justify-content: center;
+    }
+
+    .pagination .page-link {
+        color: #0E9097;  /* Color del texto en los botones de paginación */
+        border-color: #ddd;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #2A4F62;
+        border-color: #0E9097;
+        color: white;
+    }
+
+    .pagination .page-link:hover {
+        background-color: #6DA5C0;
+        color: white;
+    }
+
+    .pagination .page-link:focus {
+        box-shadow: none;
+    }
+
+</style>
+<div class="card" style="background-color: #0E9097;">
     <div class="container mt-4">
         <h3 class="text-center mb-4">Bitácora de Actividades</h3>
         <table class="table table-hover table-striped table-bordered">
@@ -26,7 +90,6 @@
                 {% endfor %}
             </tbody>
         </table>
-
         <!-- Paginación -->
         <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center">

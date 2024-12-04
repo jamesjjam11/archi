@@ -2,15 +2,102 @@
 {% block content %}
 <br><br><br>
 <div class="container">
-    <h2>Solicitud de Préstamo de Documentos</h2>
+    <h2 class="text-center">Solicitud de Préstamo de Documentos</h2>
     <div class="card">
-        <div class="card-body">
+        <div class="card-body1">
             <form method="POST">
                 {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary">Enviar Solicitud</button>
+                <div class="row">
+                    {% for field in form %}
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ field.label_tag }} 
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="invalid-feedback1">
+                                        {{ field.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-primary3">Enviar Solicitud</button>
             </form>
+            {% if mensaje %}
+            <div class="alert alert-success2 mt-3">
+                {{ mensaje }}
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
+
+<style>
+    /* Estilos generales */
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    
+    /* Contenedor principal */
+    .container {
+        max-width: 900px;
+    }
+
+    /* Estilos del título */
+    h2 {
+        color: white;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    /* Tarjeta */
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    .card-body1 {
+        padding: 20px;
+        background-color: #0E9097;
+    }
+
+    /* Campos del formulario */
+    .form-control1 {
+        border: 1px solid #6DA5C0;
+        border-radius: 4px;
+        transition: border-color 0.3s ease-in-out;
+    }
+
+    /* Efecto hover para los campos del formulario */
+    .form-control:focus {
+        border-color: #0E9097;
+        box-shadow: 0 0 5px rgba(14, 144, 151, 0.4);
+    }
+
+    /* Botón de envío */
+    .btn-primary3 {
+        background-color: #082E33;
+        border-color: #0E9097;
+        color: white;
+        transition: background-color 0.3s ease-in-out;
+    }
+    .btn-primary3:hover {
+        background-color: #2A4F62;
+        border-color: #6DA5C0;
+        color: white;
+    }
+    /* Mensajes de error */
+    .invalid-feedback1 {
+        color: #f8d7da;
+        font-size: 0.9em;
+    }
+    /* Estilo para el mensaje de éxito */
+    .alert-success2 {
+        background-color: #28a745;
+        color: white;
+        font-weight: bold;
+    }
+</style>
 {% endblock %}

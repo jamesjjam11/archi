@@ -1,36 +1,126 @@
 {% extends 'user/index.html' %}
 {% block content %}
 <br><br><br>
-<div class="card-body">
-    <h1>Búsqueda de Documentos</h1>
-    <form method="GET" action="{% url 'buscar_documentos' %}" id="form-busqueda">
-        <div class="search-box">
-            <input type="text" id="search-input" name="query" placeholder="Buscar documentos..." autocomplete="off">
-            <input type="text" name="comprobante" placeholder="Comprobante" style="display:none;">
-            <input type="date" name="fecha_subida" style="display:none;">
-            <input type="number" name="año" placeholder="Año" style="display:none;">
+<!-- Estilos para la tabla de resultados -->
+<style>
+    /* Contenedor de la tabla */
+    .table-container {
+        margin: 20px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* Encabezado de la tabla */
+    .table thead {
+        background-color: #2A4F62;
+        color: white;
+    }
+
+    /* Estilo de la tabla */
+    .table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .table th {
+        color: white;
+        font-weight: bold;
+    }
+
+    .table td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    /* Colores de fila */
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #0E9097;
+    }
+
+    .table-striped tbody tr:nth-of-type(even) {
+        background-color: #6DA5C0;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #4B8692;
+    }
+
+    /* Estilos para botones de acciones */
+    .btn {
+        padding: 6px 12px;
+        margin: 2px;
+        color: white;
+        font-size: 14px;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    /* Paginación */
+    .pagination .page-link {
+        color: #0d1237;
+        border-color: #ddd;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #6DA5C0;
+        border-color: #6DA5C0;
+        color: white;
+    }
+
+    .pagination .page-link:hover {
+        background-color: #0E9097;
+        color: white;
+    }
+</style>
+<div class="card-body table-container">
+    <div class="container mt-3">
+        <h1>Búsqueda de Documentos</h1>
+        <form method="GET" action="{% url 'buscar_documentos' %}" id="form-busqueda">
+            <div class="search-box">
+                <input type="text" id="search-input" name="query" placeholder="Buscar documentos..." autocomplete="off">
+                <input type="text" name="comprobante" placeholder="Comprobante" style="display:none;">
+                <input type="date" name="fecha_subida" style="display:none;">
+                <input type="number" name="año" placeholder="Año" style="display:none;">
+            </div>
+            <div class="input-group-append">
+                <button class="btn btn-success" type="submit">Buscar</button>
+            </div>
+        </form>
+        <div class="card-body table-container">
+            <div id="resultados">
+            </div>
         </div>
-        <button type="submit">Buscar</button>
-    </form>
-    <div id="resultados">
     </div>
 </div>
 <script>
     document.getElementById('search-input').addEventListener('keyup', function() {
-    const query = this.value;
-    const comprobante = document.querySelector('input[name="comprobante"]').value;
-    const fecha_subida = document.querySelector('input[name="fecha_subida"]').value;
-    const año = document.querySelector('input[name="año"]').value;
-    
-    fetch(`/userArchivoapp/buscar_documentos/?query=${query}&comprobante=${comprobante}&fecha_subida=${fecha_subida}&año=${año}`, {
-        headers: { 'x-requested-with': 'XMLHttpRequest' }
-    })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('resultados').innerHTML = data.html;
-    })
-    .catch(error => console.error('Error en la búsqueda:', error));
-});
+        const query = this.value;
+        const comprobante = document.querySelector('input[name="comprobante"]').value;
+        const fecha_subida = document.querySelector('input[name="fecha_subida"]').value;
+        const año = document.querySelector('input[name="año"]').value;
 
+        fetch(`/userArchivoapp/buscar_documentos/?query=${query}&comprobante=${comprobante}&fecha_subida=${fecha_subida}&año=${año}`, {
+            headers: { 'x-requested-with': 'XMLHttpRequest' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('resultados').innerHTML = data.html;
+        })
+        .catch(error => console.error('Error en la búsqueda:', error));
+    });
 </script>
+
 {% endblock content %}

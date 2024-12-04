@@ -13,6 +13,7 @@ urlpatterns = [
     path('solicitudes/', views.lista_solicitudes, name='lista_solicitudes'),
     path('solicitudes/<int:solicitud_id>/', views.gestionar_solicitud, name='gestionar_solicitud'),
     path('prestamos/pendientes/', views.lista_prestamos_pendientes, name='lista_prestamos_pendientes'),
+    path('gestionar_solicitud/<int:solicitud_id>/', views.gestionar_solicitud, name='gestionar_solicitud'),
     path('prestamo/devolucion/modal/<int:prestamo_id>/', views.registrar_devolucion_modal, name='registrar_devolucion_modal'),
     path('buscar_documentos/', views.buscar_documentos, name='buscar_documentos'),
     path('reporte-documento/<int:documento_id>/', views.reporte_documento, name='reporte_documento'),

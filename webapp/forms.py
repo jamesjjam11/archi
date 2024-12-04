@@ -48,7 +48,7 @@ class CargoForm(forms.ModelForm):
 class UsuarioCargoUnidadForm(forms.ModelForm):
     class Meta:
         model = UsuarioCargoUnidad
-        fields = ['nombre_unidad', 'nombre_cargo', 'fecha_fin', 'estado']
+        fields = ['nombre_unidad', 'nombre_cargo',]
         widgets = {
             
             'fecha_fin': forms.DateInput(attrs={'type': 'date'}),

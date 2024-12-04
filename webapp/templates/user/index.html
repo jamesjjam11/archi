@@ -56,6 +56,25 @@
     html, body {
     height: 100%;
     margin: 0; /* Elimina márgenes por defecto */
+    
+    .home-icon {
+      position: absolute;
+      top: 10px; /* Ajusta según tu diseño */
+      left: 10px;
+      z-index: 1000;
+    }
+
+  .home-link {
+    color: #fff;
+    font-size: 24px;
+    text-decoration: none;
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+
+  .home-link:hover {
+    color: #6DA5C0; /* Cambia el color al pasar el cursor */
+    transform: scale(1.2); /* Agranda el ícono al pasar el cursor */
+  }
 }
 </style>
 
@@ -108,7 +127,7 @@
                   <ul class="nav nav-collapse">
                     <li>
                       <a href="{% url 'register' %}">
-                        <span class="sub-item">Crear Usuarios</span>
+                        <span class="sub-item">Registrar Usuarios</span>
                       </a>
                     </li>
                     <li>
@@ -185,7 +204,7 @@
                     </ul>
                 </div>
               </li>
-              {% if 'SuperAdmin' in request.user_roles or 'Admin' in request.user_roles  or 'UserArchivo' in request.user_roles %}
+              {% if 'Admin' in request.user_roles%}
               <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#soli">
                   <i class="fas fa-receipt"></i>
@@ -223,12 +242,7 @@
                   </a>
                 </li>
                 {% else %}
-                <li class="nav-item">
-                  <a href="#">
-                    <i class="fas fa-clipboard-list"></i>
-                    <p>Reportes (sin documento)</p>
-                  </a>
-                </li>
+                
               {% endif %}
               <li class="nav-item">
                 <a href="{% url 'lista_reportes' %}">
@@ -287,13 +301,19 @@
           </div>
           <!-- Navbar Header -->
           <div class="d-flex justify-content-end align-items-center p-3" style="background-color: #0E9097;">
+            <div class="home-icon">
+              <a href="{% url 'index' %}" class="home-link">
+                <i class="fas fa-home"></i>
+              </a>
+            </div>
+            
             <!-- Ícono para mostrar datos del usuario -->
             <button class="btn btn-sm text-white" data-bs-toggle="modal" data-bs-target="#userModal" style="background-color: transparent;">
               <i class="fas fa-user"></i>
             </button>
           
             <!-- Botón para Cerrar Sesión -->
-            <a class="btn btn-sm ms-2" style="width: 100px; background-color: #6DA5C0; border-color: white; color: white;" href="{% url 'logout' %}?next=/login/">
+            <a class="btn btn-sm ms-2" style="width: 120px; background-color: #6DA5C0; border-color: white; color: white;" href="{% url 'logout' %}?next=/login/">
               Cerrar Sesión
             </a>
           </div>
@@ -341,8 +361,7 @@
     <!--   Core JS Files   -->
     <!-- jQuery (necesario para los plugins de JavaScript de Bootstrap) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Notify.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+    
 <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 

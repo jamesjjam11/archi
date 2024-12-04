@@ -18,6 +18,7 @@ class Documento(models.Model):
     unidad = models.ForeignKey(Unidad, on_delete=models.SET_NULL, null=True, blank=True)
     nombre_archivo = models.CharField(max_length=255)
     archivo = models.FileField(upload_to='documentos/')
+    fecha_documento = models.DateField(null=True, blank=True)
     fecha_subida = models.DateTimeField(auto_now_add=True)
     estado = models.CharField(max_length=50, choices=ESTADO_CHOICES)
     numero_hojas = models.IntegerField()

@@ -1,30 +1,31 @@
 {% extends 'user/index.html' %}
 
 {% block content %}
+<br><br>
   <div class="container mt-5">
-    <h2>Lista de Reportes</h2>
+    <h2 class="text-center" style="color: white;">Lista de Reportes</h2>
 
     <!-- Selección de filtros de fecha -->
     <div class="mb-3 no-print">
       <div class="col-md-12">
         <h4>Reportes por:</h4>
-        <a href="?filtro=dia" class="btn btn-primary {% if filtro == 'dia' %}active{% endif %}">Día</a>
-        <a href="?filtro=semana" class="btn btn-primary {% if filtro == 'semana' %}active{% endif %}">Semana</a>
-        <a href="?filtro=mes" class="btn btn-primary {% if filtro == 'mes' %}active{% endif %}">Mes</a>
+        <a href="?filtro=dia" class="btn btn-info1 {% if filtro == 'dia' %}active{% endif %}">Día</a>
+        <a href="?filtro=semana" class="btn btn-info1 {% if filtro == 'semana' %}active{% endif %}">Semana</a>
+        <a href="?filtro=mes" class="btn btn-info1 {% if filtro == 'mes' %}active{% endif %}">Mes</a>
       </div>
       <div class="col-md-6">
         <h4>Seleccione la fecha o rango para ver los reportes</h4>
         <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control mb-2 d-inline-block w-auto">
         <input type="date" id="fecha_fin" name="fecha_fin" class="form-control mb-2 d-inline-block w-auto">
-        <button onclick="filtrarRango()" class="btn btn-primary">Aplicar Rango</button>
+        <button onclick="filtrarRango()" class="btn btn-secondary2">Aplicar Rango</button>
       </div>
       <div class="col-md-12">
-        <button onclick="window.print()" class="btn btn-secondary">Imprimir Reporte</button>
+        <button onclick="window.print()" class="btn btn-dark">Imprimir Reporte</button>
       </div>
     </div>
 
     <table class="table table-striped">
-      <thead>  
+      <thead>
         <tr>
           <th>#</th>
           <th>Nombre del Archivo</th>
@@ -45,8 +46,13 @@
           <td>{{ documento.ubicacion }}</td>
           <td>{{ documento.fecha_subida }}</td>
           <td class="no-print">
-            <a href="{% url 'reporte_documento' documento.id %}" class="btn btn-info">Ver Reporte</a>
-            <a href="{% url 'descargar_reporte' documento.id %}" class="btn btn-success">Descargar Reporte</a>
+            <a href="{% url 'reporte_documento' documento.id %}" class="btn btn-info">
+              <i class="fas fa-eye"></i> <!-- Icono de ver -->
+          </a>
+          <a href="{% url 'descargar_reporte' documento.id %}" class="btn btn-success">
+              <i class="fas fa-download"></i> <!-- Icono de descargar -->
+          </a>
+          
           </td>
         </tr>
         {% empty %}
@@ -56,8 +62,133 @@
         {% endfor %}
       </tbody>
     </table>
+
+    <!-- Paginador -->
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
+        {% if documentos.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page=1&q={{ query }}" aria-label="First">
+              <span aria-hidden="true">&laquo;&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?page={{ documentos.previous_page_number }}&q={{ query }}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        {% endif %}
+
+        {% for i in documentos.paginator.page_range %}
+          {% if documentos.number == i %}
+            <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+          {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{ i }}&q={{ query }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+
+        {% if documentos.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ documentos.next_page_number }}&q={{ query }}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?page={{ documentos.paginator.num_pages }}&q={{ query }}" aria-label="Last">
+              <span aria-hidden="true">&raquo;&raquo;</span>
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
   </div>
+
   <style>
+    /* Contenedor de la tabla */
+    .container {
+      margin-top: 20px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* Encabezado de la tabla */
+    .table thead {
+      background-color: #082E33;
+      color: white;
+    }
+
+    /* Estilo de la tabla */
+    .table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    .table th {
+      color: white;
+      font-weight: bold;
+    }
+
+    .table td {
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    /* Colores de fila */
+    .table-striped tbody tr:nth-of-type(odd) {
+      background-color: #6DA5C0;
+    }
+
+    .table-striped tbody tr:nth-of-type(even) {
+      background-color: #6DA5C0;
+    }
+
+    .table-hover tbody tr:hover {
+      background-color: #2A4F62;
+    }
+
+    /* Estilos para botones de acciones */
+    .btn {
+      padding: 6px 12px;
+      margin: 2px;
+      color: white;
+      font-size: 14px;
+    }
+    .btn-dark{
+      background-color: #041619;
+      border-color: #0E9097;
+    }
+    .btn-info1 {
+      background-color: #082E33;
+      border-color: #17a2b8;
+    }
+
+    .btn-success {
+      background-color: #28a745;
+      border-color: #28a745;
+    }
+
+    .btn-secondary2 {
+      background-color: #171a4a;
+      border-color: greenyellow;
+    }
+
+    /* Paginación */
+    .pagination .page-link {
+      color: #0d1237;
+      border-color: #ddd;
+    }
+
+    .pagination .page-item.active .page-link {
+      background-color: #082E33;
+      border-color: #6DA5C0;
+      color: white;
+    }
+
+    .pagination .page-link:hover {
+      background-color: #0E9097;
+      color: white;
+    }
+
     /* Estilos específicos para impresión */
     @media print {
       .no-print, .btn, .mb-3, header, nav, aside {
@@ -66,7 +197,7 @@
       .container {
         margin: 0 auto;
         padding: 0;
-        width: 60%; /* Reduce el ancho al 60% para centrarlo aún más */
+        width: 60%;
       }
       table {
         width: 100%;
@@ -80,5 +211,17 @@
         text-align: left;
       }
     }
-  </style>  
+  </style>
+  <script>
+    function filtrarRango() {
+    const fechaInicio = document.getElementById("fecha_inicio").value;
+    const fechaFin = document.getElementById("fecha_fin").value;
+    if (fechaInicio && fechaFin) {
+        const url = `?filtro=rango&fecha_inicio=${fechaInicio}&fecha_fin=${fechaFin}`;
+        window.location.href = url;
+    }
+}
+
+</script>
+
 {% endblock %}

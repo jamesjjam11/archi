@@ -14,6 +14,20 @@
     #id_estado {
         text-transform: none; /* Mantiene el texto en su forma original */
     }
+    .custom-button1 {
+                width: 150px;
+                background-color: #082E33;
+                color: white;
+                border: 2px solid #6DA5C0;
+                padding: 8px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s, border-color 0.3;
+              }
+              .custom-button1:hover {
+                background-color: #2A4F62; 
+                border-color: #1F3B4D;
+    }
 </style>
 <!-- Modal de éxito -->
 <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
@@ -45,8 +59,9 @@
                                 <!-- Sección de Archivo -->
                                 <h3 class="mb-3">Archivo</h3>
                                 <div class="form-row">
-                                    <div class="col-md-7">
+                                    <div class="col-md-6">
                                         <div class="form-row">
+                                            <!-- NOMBRE DEL ARCHIVO -->
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label class="bmd-label-floating" for="{{ nombre_archivo.id_for_label }}">Nombre del Archivo:</label>
@@ -76,6 +91,24 @@
                                                 </div>
                                                 </div>
                                             </div>
+                                            <!-- Campo Fecha del Documento -->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="bmd-label-floating" for="{{ fecha_documento.id_for_label }}">Fecha del Documento:</label>
+                                                    <input type="{{ fecha_documento.field.widget.input_type }}" 
+                                                           name="{{ fecha_documento.name }}" 
+                                                           id="{{ fecha_documento.id_for_label }}" 
+                                                           class="form-control" 
+                                                           value="{{ fecha_documento.value|default_if_none:'' }}">
+                                            
+                                                    {% if fecha_documento.errors %}
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ fecha_documento.errors }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <!-- DESCRIPCION -->
                                             <div class="col-md-4">
                                                 <div class="form-group col-md-6" style="width: 50px;">
                                                     <label for="{{ detalles.id_for_label }}">Descripción:</label>
@@ -302,29 +335,37 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button class="btn btn-secondary" type="submit" {% if not gestion %}disabled{% endif %}>Subir Documento</button>
+                                <button class="custom-button1" type="submit" {% if not gestion %}disabled{% endif %}>Subir Documento</button>
                             </form>
                         </div>
-                            
                         </div>
                     </div>
                 </div>
 
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
-                        {% if messages %}
-                            // Mostrar modal si hay un mensaje de éxito
-                            $('#successModal').modal('show');
-                            setTimeout(function(){
-                                $('#successModal').modal('hide');
-                            }, 2000);  // 2 segundos de retraso
+                        // Verificar si ya se mostró el modal en esta sesión
+                        if (sessionStorage.getItem('modalShown') !== 'true') {
+                            {% if messages %}
+                                // Mostrar modal si hay un mensaje de éxito
+                                $('#successModal').modal('show');
+                                
+                                setTimeout(function() {
+                                    // Ocultar el modal después de 1 segundo (1000 ms)
+                                    $('#successModal').modal('hide');
+                                    
+                                    // Establecer que el modal ya ha sido mostrado
+                                    sessionStorage.setItem('modalShown', 'true');
+                                }, 1000);  // 1 segundo de retraso
 
-                            // Limpiar el formulario
-                            document.getElementById("documentForm").reset();
-                            document.getElementById("fileLabel").textContent = "Seleccionar archivo...";
-                            document.getElementById("filePreview").style.display = "none";
-                        {% endif %}
+                                // Limpiar el formulario
+                                document.getElementById("documentForm").reset();
+                                document.getElementById("fileLabel").textContent = "Seleccionar archivo...";
+                                document.getElementById("filePreview").style.display = "none";
+                            {% endif %}
+                        }
                     });
+
 
                     document.getElementById("{{ archivo.id_for_label }}").addEventListener("change", function(event) {
                         const fileInput = event.target;

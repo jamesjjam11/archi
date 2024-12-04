@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-9#766is36+wt5*5v%+5d&lx+i!szlig!v_o*vg409@b+2qylp4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'webapp.middleware.bitacora_middleware.BitacoraMiddleware',
+    
     
 ]
 
@@ -137,6 +138,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# Eliminar o comentar esta línea
+SESSION_COOKIE_AGE = 2* 60 * 60  # No establecer un tiempo de expiración específico
+SESSION_COOKIE_HTTPONLY = True  # Recomendado para mejorar la seguridad
+SESSION_COOKIE_SECURE = False  # Cambia a True en producción con HTTPS
 
 LOGIN_URL = 'login'  # URL para redirigir si un usuario no está autenticado
 LOGIN_REDIRECT_URL = 'index' # URL para redirigir después de hacer logout
