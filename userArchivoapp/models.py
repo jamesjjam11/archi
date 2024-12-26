@@ -21,7 +21,7 @@ class Documento(models.Model):
     fecha_documento = models.DateField(null=True, blank=True)
     fecha_subida = models.DateTimeField(auto_now_add=True)
     estado = models.CharField(max_length=50, choices=ESTADO_CHOICES)
-    numero_hojas = models.IntegerField()
+    numero_hojas = models.IntegerField(max_length=4)
     tipo_documentacion = models.CharField(max_length=100)
     ambiente = models.CharField(max_length=100)
     estante = models.CharField(max_length=100)
