@@ -24,6 +24,7 @@ from collections import defaultdict
 from itertools import groupby
 from operator import attrgetter
 from django.utils import timezone
+from django.utils.timezone import localtime
 from django.db.models import F
 from django.conf import settings
 from datetime import timedelta
@@ -110,7 +111,6 @@ def subir_documento(request):
             documento.save()
             
             # Agregar un mensaje de éxito
-            messages.success(request, 'El documento se subió con éxito.')
             return redirect('reporte_documento', documento.id)  # Redirige a la vista del reporte
             
     unidades = Unidad.objects.all().select_related('nombre_secretaria')
@@ -141,8 +141,6 @@ def get_unidades(request, secretaria_id):
     unidades = Unidad.objects.filter(nombre_secretaria_id=secretaria_id)
     unidades_list = list(unidades.values('id', 'nombre_unidad'))
     return JsonResponse({'unidades': unidades_list})
-
-
 
 @login_required
 @never_cache
@@ -273,7 +271,7 @@ def registrar_devolucion_modal(request, prestamo_id):
 @login_required
 def buscar_documentos(request):
     query = request.GET.get('query', '')
-    comprobante = request.GET.get('comprobante', '')
+    tipo = request.GET.get('tipo', '')  # Filtro para el tipo
     fecha_subida = request.GET.get('fecha_subida', '')
     año = request.GET.get('año', '')
 
@@ -282,8 +280,8 @@ def buscar_documentos(request):
     if query:
         resultados = resultados.filter(nombre_archivo__icontains=query)
 
-    if comprobante:
-        resultados = resultados.filter(comprobante__icontains=comprobante)
+    if tipo:
+        resultados = resultados.filter(tipo__icontains=tipo)
 
     if fecha_subida:
         resultados = resultados.filter(fecha_subida=fecha_subida)
@@ -301,6 +299,8 @@ def buscar_documentos(request):
         return JsonResponse({'html': html})
 
     return render(request, 'buscar_documentos.html', {'resultados': page_obj})
+
+
 @never_cache
 @login_required
 def reporte_documento(request, documento_id):   
@@ -313,8 +313,6 @@ def reporte_documento(request, documento_id):
     }
     # Renderizar la plantilla del reporte
     return render(request, 'reporte_documento.html', context)
-
-from django.utils.timezone import localtime
 
 @never_cache
 @login_required
@@ -345,7 +343,7 @@ def lista_reportes(request):
             documentos = documentos
 
     # Paginación
-    paginator = Paginator(documentos, 4)  # 4 documentos por página
+    paginator = Paginator(documentos, 10)  # 10 documentos por página
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -433,10 +431,16 @@ def descargar_documento(request, documento_id):
     file_path = documento.archivo.path  # Supongo que tu modelo Documento tiene un campo llamado archivo
     response = FileResponse(open(file_path, 'rb'), as_attachment=True)
 
+    # Asegurarte de que el nombre del archivo tenga la extensión .pdf
+    nombre_archivo = documento.nombre_archivo
+    if not nombre_archivo.lower().endswith('.pdf'):
+        nombre_archivo += '.pdf'
+
     # Establecer el nombre del archivo para la descarga
-    response['Content-Disposition'] = f'attachment; filename="{documento.nombre_archivo}"'
+    response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
 
     return response
+
 @never_cache
 @login_required
 def gestionar_gestion(request):

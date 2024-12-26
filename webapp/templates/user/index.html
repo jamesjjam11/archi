@@ -258,6 +258,31 @@
                   <p>gestion</p>
                 </a>
               </li>
+              {% endif %} 
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#ayuda">
+                  <i class="fas fa-question-circle"></i>
+                  <p>Ayuda</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="ayuda">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="{% static 'docs/manual_usuario.pdf' %}" target="_blank">
+                        <span class="sub-item">Manual de Usuario</span>
+                      </a>
+                    </li>
+                    {% if 'SuperAdmin' in request.user_roles %}
+                    <li>
+                      <a href="{% static 'docs/manual_tecnico.pdf' %}" target="_blank">
+                        <span class="sub-item">Manual Técnico</span>
+                      </a>
+                    </li>
+                    {% endif %} 
+                  </ul>
+                </div>
+              </li>
+              {% if 'SuperAdmin' in request.user_roles %}
               <li class="nav-item">
                 <form method="POST" action="{% url 'backup_database' %}" id="backup-form">
                   {% csrf_token %}
@@ -267,6 +292,7 @@
                 </form>
               </li>
               {% endif %}
+              
             </ul>
           </div>
         </div>

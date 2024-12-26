@@ -87,11 +87,12 @@
 </style>
 <div class="card-body table-container">
     <div class="container mt-3">
-        <h1>Búsqueda de Documentos</h1>
+        <h1 class="text-center" style="color: white;">Búsqueda de Documentos</h1>
         <form method="GET" action="{% url 'buscar_documentos' %}" id="form-busqueda">
             <div class="search-box">
                 <input type="text" id="search-input" name="query" placeholder="Buscar documentos..." autocomplete="off">
                 <input type="text" name="comprobante" placeholder="Comprobante" style="display:none;">
+                <input type="text" name="tipo" placeholder="Buscar por tipo" style="display: none;">
                 <input type="date" name="fecha_subida" style="display:none;">
                 <input type="number" name="año" placeholder="Año" style="display:none;">
             </div>

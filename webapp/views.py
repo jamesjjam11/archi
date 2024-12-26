@@ -189,7 +189,7 @@ def list_user(request):
         )
 
     # Paginación
-    paginator = Paginator(usuarios, 5)  # 10 usuarios por página
+    paginator = Paginator(usuarios, 4)  # 4 usuarios por página
     page_number = request.GET.get('page')  # Obtiene el número de página de la consulta
     try:
         usuarios_paginated = paginator.page(page_number)

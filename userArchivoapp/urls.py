@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -22,7 +22,7 @@ urlpatterns = [
     path('descargar_documento/<int:documento_id>/', views.descargar_documento, name='descargar_documento'),
     path('gestionar-gestion/', views.gestionar_gestion, name='gestionar_gestion'),
     path('cerrar-gestion/<int:gestion_id>/', views.cerrar_gestion, name='cerrar_gestion'),
-    
+    path('solicitar-prestamo/', include('userPersonal.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

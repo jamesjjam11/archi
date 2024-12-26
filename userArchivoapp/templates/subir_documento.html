@@ -29,20 +29,6 @@
                 border-color: #1F3B4D;
     }
 </style>
-<!-- Modal de éxito -->
-<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="successModalLabel">Éxito</h5>
-            </div>
-            <div class="modal-body">
-                El documento se ha subido con éxito.
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="container">
     <div class="page-inner">
         <div class="row">
@@ -80,15 +66,16 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                <label for="{{ archivo.id_for_label }}">Archivo:</label>
-                                                <div class="custom-file">
-                                                    <input type="file" name="archivo" id="{{ archivo.id_for_label }}" class="custom-file-input">
-                                                    <label class="custom-file-label" id="fileLabel" for="{{ archivo.id_for_label }}">Seleccionar archivo...</label>
-                                                </div>
-                                                <div id="filePreview" class="mt-2" style="border: 1px solid #ddd; padding: 10px; display: none;">
-                                                    <img id="fileIcon" src="" alt="Ícono de archivo" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px; display: none;" />
-                                                    <span id="fileName"></span>
-                                                </div>
+                                                    <label for="{{ archivo.id_for_label }}">Archivo:</label>
+                                                    <div class="custom-file">
+                                                        <!-- Agregar el atributo accept para restringir a archivos .pdf -->
+                                                        <input type="file" name="archivo" id="{{ archivo.id_for_label }}" class="custom-file-input" accept=".pdf" onchange="validateFileType(event)">
+                                                        <label class="custom-file-label" id="fileLabel" for="{{ archivo.id_for_label }}">Seleccionar archivo...</label>
+                                                    </div>
+                                                    <div id="filePreview" class="mt-2" style="border: 1px solid #ddd; padding: 10px; display: none;">
+                                                        <img id="fileIcon" src="" alt="Ícono de archivo" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px; display: none;" />
+                                                        <span id="fileName"></span>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <!-- Campo Fecha del Documento -->
@@ -341,32 +328,28 @@
                         </div>
                     </div>
                 </div>
+                <script>
+                    // Función que valida el tipo de archivo
+                    function validateFileType(event) {
+                        var fileInput = event.target;
+                        var filePath = fileInput.value;
+                        var allowedExtensions = /(\.pdf)$/i; // Solo permite archivos PDF
+                
+                        if (!allowedExtensions.exec(filePath)) {
+                            // Si el archivo no es PDF, muestra un mensaje de error y limpia el campo
+                            alert('Solo se permiten archivos PDF.');
+                            fileInput.value = ''; // Limpiar el campo de selección
+                            return false;
+                        }
+                
+                        // Si el archivo es válido, muestra el nombre del archivo
+                        var fileName = fileInput.files[0].name;
+                        document.getElementById("fileName").textContent = fileName;
+                        document.getElementById("filePreview").style.display = "block"; // Mostrar la vista previa
+                    }
+                </script>
 
                 <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        // Verificar si ya se mostró el modal en esta sesión
-                        if (sessionStorage.getItem('modalShown') !== 'true') {
-                            {% if messages %}
-                                // Mostrar modal si hay un mensaje de éxito
-                                $('#successModal').modal('show');
-                                
-                                setTimeout(function() {
-                                    // Ocultar el modal después de 1 segundo (1000 ms)
-                                    $('#successModal').modal('hide');
-                                    
-                                    // Establecer que el modal ya ha sido mostrado
-                                    sessionStorage.setItem('modalShown', 'true');
-                                }, 1000);  // 1 segundo de retraso
-
-                                // Limpiar el formulario
-                                document.getElementById("documentForm").reset();
-                                document.getElementById("fileLabel").textContent = "Seleccionar archivo...";
-                                document.getElementById("filePreview").style.display = "none";
-                            {% endif %}
-                        }
-                    });
-
-
                     document.getElementById("{{ archivo.id_for_label }}").addEventListener("change", function(event) {
                         const fileInput = event.target;
                         const file = fileInput.files[0];

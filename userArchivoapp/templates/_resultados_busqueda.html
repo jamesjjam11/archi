@@ -92,10 +92,9 @@
                     <th>Secretaría</th>
                     <th>Unidad</th>
                     <th>Fecha de Subida</th>
-                    <th>Estado</th>
-                    <th>Número de Hojas</th>
                     <th>Gestión</th>
-                    <th>Tipo de Documentación</th>
+                    <th>Comprobante</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -106,10 +105,12 @@
                     <td>{{ documento.secretaria }}</td>
                     <td>{{ documento.unidad }}</td>
                     <td>{{ documento.fecha_subida }}</td>
-                    <td>{{ documento.estado }}</td>
-                    <td>{{ documento.numero_hojas }}</td>
                     <td>{{ documento.gestion }}</td>
-                    <td>{{ documento.tipo_documentacion }}</td>
+                    <td>{{ documento.tipo}}</td>
+                    <td>
+                        <a href="{% url 'descargar_documento' documento.id %}" class="btn btn-primary btn-sm"><i class="fas fa-download"></i></a>
+                        <a href="{{ documento.archivo.url }}" class="btn btn-secondary" target="_blank" ><i class="fas fa-eye"></i></a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
